@@ -23,6 +23,8 @@ function App(): JSX.Element {
     <Text style={styles.regular}>Huỳnh Thị Mỹ Linh  </Text>
     <Text style={styles.semibold}>Huỳnh Thị Mỹ Linh  </Text>
     <Text style={styles.thin}>Huỳnh Thị Mỹ Linh  </Text>
+    <Text style={styles.thin}>Huỳnh Thị Mỹ Linh  </Text>
+
 
     </SafeAreaView>
   );
