@@ -1,3 +1,9 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable eqeqeq */
+/* eslint-disable prettier/prettier */
+/* eslint-disable jsx-quotes */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import {
   SafeAreaView,
