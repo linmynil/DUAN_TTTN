@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const ARROW_BACK = require('../../assets/images/arrow_back.png');
 export const ARROW_DOWN = require('../../assets/images/arrow_down.png');
 export const ARROW_RIGHT = require('../../assets/images/arrow_right.png');

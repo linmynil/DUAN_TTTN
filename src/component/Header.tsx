@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import { Dimensions, Image, ImageStyle, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { ARROW_BACK, Colors, fontFamily } from '../../assets';
@@ -25,12 +26,12 @@ const _styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop:31
+    marginTop:21,
   },
   icon: {
     width: 24,
     height: 24,
-    opacity:1
+    opacity:1,
   },
   text: {
     fontFamily: fontFamily.Bold,
@@ -38,8 +39,8 @@ const _styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 32,
     width: Dimensions.get('window').width * 0.80,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 
 export const Header = React.memo(_Header);
