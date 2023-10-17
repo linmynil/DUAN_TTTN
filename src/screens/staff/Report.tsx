@@ -16,7 +16,7 @@ const Report: React.FC = () => {
     const [selectTab, setSelectTab] = useState(0);
     return (
       <SafeAreaView style={styles.container}>
-        <Header title='Sự cố '></Header>
+        <Header title='Báo cáo sự cố '></Header>
         <View style={styles.switchButton}>
           <View style={styles.bordertab}>
             <TouchableOpacity onPress={() => setSelectTab(0)} style={[styles.button, { backgroundColor: selectTab == 0 ? Colors.YELLOW : Colors.WHITE }]}>
