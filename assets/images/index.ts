@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 export const ARROW_BACK = require('../../assets/images/arrow_back.png');
 export const ARROW_DOWN = require('../../assets/images/arrow_down.png');
 export const ARROW_RIGHT = require('../../assets/images/arrow_right.png');
@@ -33,14 +32,4 @@ export const STATUS = require('../../assets/images/status.png');
 export const TOGGLE_CLICK = require('../../assets/images/toggle_click.png');
 export const TOGGLE_NOTIFICATION = require('../../assets/images/toggle_notification.png');
 export const TOGGLE = require('../../assets/images/toggle.png');
-export const SUBTRACT= require('../../assets/images/subtract.png');
-export const IMAGE_LOGIN= require('../../assets/images/image_login.png');
-
-
-
-
-
-
-
-
-
+export const ELLIPSE = require('../../assets/images/Ellipse.png');

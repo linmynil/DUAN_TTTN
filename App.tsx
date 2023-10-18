@@ -11,11 +11,8 @@ import { Colors} from './assets';
 import { Header } from './src/component/Header';
 import Report from './src/screens/staff/Report';
 import { Button } from './src/component/Button';
-import Login from './src/screens/lecturers/Login';
-import Home from './src/screens/lecturers/Home';
-import FormReport from './src/screens/lecturers/FormReport';
-import StepsReport from './src/screens/lecturers/StepsReport';
-
+import Detail from './src/screens/staff/Detail';
+import DetailTiepNhanSuCo from './src/screens/staff/DetailTiepNhanSuCo';
 
 function App(): JSX.Element {
   const [selectTab, setSelectTab] = useState(0);
@@ -35,10 +32,10 @@ function App(): JSX.Element {
     <Text style={styles.thin}>Huỳnh Thị Mỹ Linh  </Text>
     <Text style={styles.thin}>Huỳnh Thị Mỹ Linh  </Text> */}
       {/* đây là màn hình xem báo sự cố của nhân viên */}
-     {/* <Login></Login> */}
-     {/* <FormReport></FormReport> */}
-    < StepsReport></StepsReport>
-     {/* <Home></Home> */}
+      <Report></Report>
+      {/* <Detail></Detail> */}
+      {/* <DetailTiepNhanSuCo></DetailTiepNhanSuCo> */}
+
       {/* Sử dụng button truyền vào title và width, status chỉ truyền vào ở màn hình báo cáo sự cố */}
       {/* <Button status={status} title='Gửi yêu cầu' onPress={handleButton} viewStyle={{width:367}}></Button> */}
     </SafeAreaView>
@@ -47,7 +44,6 @@ function App(): JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1
   },
   black: {
     fontFamily: 'Roboto-Thin',
