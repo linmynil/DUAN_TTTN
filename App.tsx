@@ -13,6 +13,8 @@ import Report from './src/screens/staff/Report';
 import { Button } from './src/component/Button';
 import Login from './src/screens/lecturers/Login';
 import Home from './src/screens/lecturers/Home';
+import FormReport from './src/screens/lecturers/FormReport';
+import StepsReport from './src/screens/lecturers/StepsReport';
 
 
 function App(): JSX.Element {
@@ -33,7 +35,9 @@ function App(): JSX.Element {
     <Text style={styles.thin}>Huỳnh Thị Mỹ Linh  </Text>
     <Text style={styles.thin}>Huỳnh Thị Mỹ Linh  </Text> */}
       {/* đây là màn hình xem báo sự cố của nhân viên */}
-     <Login></Login>
+     {/* <Login></Login> */}
+     {/* <FormReport></FormReport> */}
+    < StepsReport></StepsReport>
      {/* <Home></Home> */}
       {/* Sử dụng button truyền vào title và width, status chỉ truyền vào ở màn hình báo cáo sự cố */}
       {/* <Button status={status} title='Gửi yêu cầu' onPress={handleButton} viewStyle={{width:367}}></Button> */}

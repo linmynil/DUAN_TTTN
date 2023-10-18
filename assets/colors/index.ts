@@ -9,4 +9,5 @@ export const Colors = {
     GRAY_BOTTOM:'#D0D0D0',
     GRAY_TEXT:'#8C8C8C',
     GRAY_TEXT2:'#747070',
+    BLACK_STROKE:'#3F3D56',
   };
