@@ -33,3 +33,21 @@ export const TOGGLE_CLICK = require('../../assets/images/toggle_click.png');
 export const TOGGLE_NOTIFICATION = require('../../assets/images/toggle_notification.png');
 export const TOGGLE = require('../../assets/images/toggle.png');
 export const ELLIPSE = require('../../assets/images/Ellipse.png');
+export const IMAGE_LOGIN = require('../../assets/images/image_login.png');
+export const SUBTRACT = require('../../assets/images/subtract.png');
+export const ARROW_SMALL = require('../../assets/images/arrow_small.png');
+export const EYE = require('../../assets/images/eye.png');
+export const EMAIL = require('../../assets/images/email.png');
+export const PASSWORD = require('../../assets/images/password.png');
+export const USER = require('../../assets/images/user.png');
+export const PHONE_REGISTER = require('../../assets/images/phone_register.png');
+
+
+
+
+
+
+
+
+
+

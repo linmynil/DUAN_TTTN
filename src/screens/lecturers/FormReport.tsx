@@ -1,18 +1,14 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable jsx-quotes */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/self-closing-comp */
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable prettier/prettier */
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, StatusBar } from 'react-native';
 import React, { useState } from 'react';
 import { Header } from '../../component/Header';
 import { CAMERA, Colors, PICTURE, fontFamily } from '../../../assets';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Button } from '../../component/Button';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigate/StackHome';
+import { SafeAreaView } from 'react-native-safe-area-context';
+type PropsType = NativeStackScreenProps<RootStackParamList, 'FormReport'>;
 
 //data list
 const data = [
@@ -22,7 +18,8 @@ const data = [
    { key: '4', value: 'Góp ý phòng học' },
    { key: '5', value: 'Sự cố khác' },
 ];
-const FormReport = () => {
+const FormReport: React.FC<PropsType> = (props) => {
+   const {navigation} = props;
    //dropdown pick
    const [selected, setSelected] = useState('');
 
@@ -30,11 +27,15 @@ const FormReport = () => {
    const [status, setstatus] = useState(true);
    const handleButton = () => {
       setstatus(status);
+      navigation.navigate('StepsReport');
    };
 
    return (
-      <View style={styles.container}>
-         <Header title='Báo cáo sự cố'></Header>
+      <SafeAreaView style={styles.container}>
+         <StatusBar barStyle="dark-content"
+                backgroundColor={'transparent'}
+                translucent />
+         <Header title='Báo cáo sự cố ' onPress={()=>navigation.goBack()}></Header>
          <View style={styles.inputContainer}>
             <TextInput
                style={styles.inputContent}
@@ -67,7 +68,7 @@ const FormReport = () => {
             </View>
          </View>
          <Button status={status} title='Gửi yêu cầu' onPress={handleButton} viewStyle={{ width: '100%', marginTop: 16 }}></Button>
-      </View>
+      </SafeAreaView>
    );
 };
 
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.WHITE,
    },
    container: {
-      marginHorizontal: 24,
+      paddingHorizontal: 24,
+      flex:1
    },
 });

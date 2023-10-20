@@ -11,5 +11,9 @@ export const Colors = {
     RED:'#F62B2B',
     GREEN:'#1ED760',
     DACAM:'#FEECDC',
-    ORANGE:'#FFC633'
+    ORANGE:'#FFC633',
+    GRAY_TEXT2:'#747070',
+    BLUE:'#0386D0'
+
+    
   };

@@ -1,15 +1,25 @@
 /* eslint-disable prettier/prettier */
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StatusBar, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { Header } from '../../component/Header';
 import { Colors, STATUS, STATUS_DONE, fontFamily } from '../../../assets';
 import { Button } from '../../component/Button';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigate/StackHome';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const StepsReport = () => {
+type PropsType = NativeStackScreenProps<RootStackParamList, 'StepsReport'>;
+const StepsReport: React.FC<PropsType> = props => {
+    const { navigation } = props;
    return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+         <StatusBar
+          barStyle="dark-content"
+                backgroundColor={'transparent'}
+                translucent />
          <Header
-            title='Yêu cầu hỗ trợ' />
+            title='Yêu cầu hỗ trợ'
+            onPress={()=>navigation.goBack()} />
 
          <View style={styles.itemCard}>
             <Image
@@ -57,7 +67,7 @@ const StepsReport = () => {
             </View>
          </View>
          <Button title='Phản hồi' viewStyle={{width:'100%', marginTop: 24}}></Button>
-      </View>
+      </SafeAreaView>
    );
 };
 
@@ -162,5 +172,6 @@ const styles = StyleSheet.create({
    },
    container: {
       paddingHorizontal: 24,
+      flex: 1,
    },
 });

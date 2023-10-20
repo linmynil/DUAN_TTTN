@@ -1,15 +1,107 @@
 import React, { useState } from 'react';
-import { BackHandler, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image }
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, ImageSourcePropType, StatusBar }
   from 'react-native';
 import { Header } from '../../component/Header';
-import { Colors, EDIT, ELLIPSE, HOME, HOME_CLICK, INTERNET, MANAGER, NOTIFICATION, SETTING, STATUS, fontFamily } from '../../../assets'
+import { Colors, ELLIPSE, IMAGE_LOGIN, fontFamily } from '../../../assets'
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigate/StackHome';
 
+type Item = {
+  id: string;
+  title: string;
+  avatar: ImageSourcePropType;
+  name: string;
+  room: string;
+  time: string;
+};
 
-const Report: React.FC = () => {
+type ItemProps = {
+  item: Item;
+  onPress: () => void;
+};
+const Item = ({ item, onPress }: ItemProps) => {
+  const time = item.time;
+  const date = time.substring(0, 10);
+  const timedetail = time.substring(11, 19);
+  return (
+    <TouchableOpacity onPress={onPress} style={styles.item}>
+      <Text style={styles.title}>{item.title}</Text>
+      <View style={styles.row}>
+        <Image style={styles.avatar} source={item.avatar}  ></Image>
+        <View>
+          <Text style={[styles.title, { fontSize: 13 }]}>{item.name}</Text>
+          <View style={styles.row}>
+            <Text style={styles.itemText}>Phòng: {item.room}</Text>
+            <Text style={styles.itemText}>{timedetail}</Text>
+            <Text style={styles.itemText}>{date}</Text>
+          </View>
+        </View>
+      </View>
+
+    </TouchableOpacity>
+  )
+
+};
+type PropsType = NativeStackScreenProps<RootStackParamList, 'Report'>;
+const Report: React.FC<PropsType> = props => {
+    const { navigation } = props;
   const [selectTab, setSelectTab] = useState(0);
+  const [data, setData] = React.useState<Item[]>(
+    [{
+      id: '1',
+      title: 'Sự cố máy chiếu hỏng',
+      avatar: IMAGE_LOGIN,
+      name: 'Lê Minh Hiếu',
+      room: 'T1103',
+      time: '2023-10-18T12:34:56'
+    },
+    {
+      id: '2',
+      title: 'Sự cố máy chiếu hỏng',
+      avatar: IMAGE_LOGIN,
+      name: 'Lê Minh Hiếu',
+      room: 'T1103',
+      time: '2023-10-18T12:34:56'
+    },
+    {
+      id: '3',
+      title: 'Sự cố máy chiếu hỏng',
+      avatar: IMAGE_LOGIN,
+      name: 'Lê Minh Hiếu',
+      room: 'T1103',
+      time: '2023-10-18T12:34:56'
+    },
+    {
+      id: '4',
+      title: 'Sự cố máy chiếu hỏng',
+      avatar: IMAGE_LOGIN,
+      name: 'Lê Minh Hiếu',
+      room: 'T1103',
+      time: '2023-10-18T12:34:56'
+    },
+    {
+      id: '5',
+      title: 'Sự cố máy chiếu hỏng',
+      avatar: IMAGE_LOGIN,
+      name: 'Lê Minh Hiếu',
+      room: 'T1103',
+      time: '2023-10-18T12:34:56'
+    },
+    ]
+  );
+
+
+
+  const handleSelect = (item:Item) => {
+    navigation.navigate('Detail');
+          console.log(item.id)
+  }  
   return (
     <SafeAreaView style={styles.container}>
-      <Header title='Sự cố '></Header>
+      <StatusBar barStyle="dark-content"
+                backgroundColor={'transparent'}
+                translucent />
+      <Header title='Sự cố 'onPress={()=>navigation.goBack()}></Header>
       <View style={styles.switchButton}>
         <View style={styles.bordertab}>
           <TouchableOpacity onPress={() => setSelectTab(0)} style={[styles.button, { backgroundColor: selectTab == 0 ? Colors.YELLOW : Colors.WHITE }]}>
@@ -20,211 +112,110 @@ const Report: React.FC = () => {
           </TouchableOpacity>
         </View>
         {selectTab == 0 ? (
-          <View style={styles.tab}>
-            <TouchableOpacity style={[styles.button, { backgroundColor: Colors.GRAY, height: 100, width: 360, top: -10,  borderRadius: 8 }]}>
-              <Text style={[styles.text, { textDecorationColor: Colors.BLACK, height: 23.23, width: 169.98, top: 21, right: 60, fontSize: 16, alignContent: 'center', lineHeight: 16 }]}>Sự cố máy chiếu hỏng</Text>
-              <View>
-                <Image style={styles.icon} source={ELLIPSE}  ></Image>
-
-                <TouchableOpacity >
-                  <Text style={[styles.text, { right: 60, top: 1 }]}>Lê Văn Hiếu</Text>
-                  <View>
-                    <Text style={[styles.text, { right: 60, top: 19 }]}>T1103</Text>
-                    <Text style={[styles.text, { left: 10, top: -2 }]}>09:45am</Text>
-                    <Text style={[styles.text, { left: 90, top: -22 }]}>17/02/2023</Text>
-                  </View>
-
-                </TouchableOpacity>
-              </View>
-
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, { backgroundColor: Colors.GRAY, height: 100, width: 360, top: 10,  borderRadius: 8 }]}>
-              <Text style={[styles.text, { textDecorationColor: Colors.BLACK, height: 23.23, width: 169.98, top: 21, right: 60, fontSize: 16, alignContent: 'center', lineHeight: 16 }]}>Sự cố máy chiếu hỏng</Text>
-              <View>
-                <Image style={styles.icon} source={ELLIPSE}  ></Image>
-                <TouchableOpacity >
-                  <Text style={[styles.text, { right: 60, top: 1 }]}>Lê Văn Hiếu</Text>
-                  <View>
-                    <Text style={[styles.text, { right: 60, top: 19 }]}>T1103</Text>
-                    <Text style={[styles.text, { left: 10, top: -2 }]}>09:45am</Text>
-                    <Text style={[styles.text, { left: 90, top: -22 }]}>17/02/2023</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.button, { backgroundColor: Colors.GRAY, height: 100, width: 360, top: 30, borderRadius: 8 }]}>
-              <Text style={[styles.text, { textDecorationColor: Colors.BLACK, height: 23.23, width: 169.98, top: 21, right: 60, fontSize: 16, alignContent: 'center', lineHeight: 16 }]}>Sự cố máy chiếu hỏng</Text>
-              <View>
-                <Image style={styles.icon} source={ELLIPSE}  ></Image>
-                <TouchableOpacity >
-                  <Text style={[styles.text, { right: 60, top: 1 }]}>Lê Văn Hiếu</Text>
-                  <View>
-                    <Text style={[styles.text, { right: 60, top: 19 }]}>T1103</Text>
-                    <Text style={[styles.text, { left: 10, top: -2 }]}>09:45am</Text>
-                    <Text style={[styles.text, { left: 90, top: -22 }]}>17/02/2023</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, { backgroundColor: Colors.GRAY, height: 100, width: 360, top: 50,  borderRadius: 8 }]}>
-              <Text style={[styles.text, { textDecorationColor: Colors.BLACK, height: 23.23, width: 169.98, top: 21, right: 60, fontSize: 16, alignContent: 'center', lineHeight: 16 }]}>Sự cố máy chiếu hỏng</Text>
-              <View>
-                <Image style={styles.icon} source={ELLIPSE}  ></Image>
-                <TouchableOpacity >
-                  <Text style={[styles.text, { right: 60, top: 1 }]}>Lê Văn Hiếu</Text>
-                  <View>
-                    <Text style={[styles.text, { right: 60, top: 19 }]}>T1103</Text>
-                    <Text style={[styles.text, { left: 10, top: -2 }]}>09:45am</Text>
-                    <Text style={[styles.text, { left: 90, top: -22 }]}>17/02/2023</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-            <View style={styles.button2}>
-                <Image style={styles.icon1} source={HOME_CLICK}  ></Image>
-             <Text style={styles.test1}>Trang chủ</Text>
-             <View>
-              <Image style={styles.icon2} source={STATUS}  ></Image>
-             </View>
-             <View>
-              <Image style={styles.icon3} source={SETTING}  ></Image>
-             </View>
-
-
+          <ScrollView showsHorizontalScrollIndicator={false}>
+            <View style={styles.tab}>  
+                {data.map((item: Item) => (
+                  <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
+                ))}     
             </View>
-          </View>
+          </ScrollView>
+
         ) : (
-          <View style={styles.tab}>
-            <TouchableOpacity style={[styles.button, { backgroundColor: Colors.GRAY, height: 100, width: 360, top: 30,  borderRadius: 8 }]}>
-              <Text style={[styles.text, { textDecorationColor: Colors.BLACK, height: 23.23, width: 169.98, top: 21, right: 60, fontSize: 16, alignContent: 'center', lineHeight: 16 }]}>Sự cố máy chiếu hỏng</Text>
-              <View>
-                <Image style={styles.icon} source={ELLIPSE}  ></Image>
-                <TouchableOpacity >
-                  <Text style={[styles.text, { right: 60, top: 1 }]}>Lê Văn Hiếu</Text>
-                  <View>
-                    <Text style={[styles.text, { right: 60, top: 19 }]}>T1103</Text>
-                    <Text style={[styles.text, { left: 10, top: -2 }]}>09:45am</Text>
-                    <Text style={[styles.text, { left: 90, top: -22 }]}>17/02/2023</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-            
-             <View style={styles.button1}>
-                <Image style={styles.icon1} source={HOME_CLICK}  ></Image>
-             <Text style={styles.test1}>Trang chủ</Text>
-             <View>
-              <Image style={styles.icon2} source={STATUS}  ></Image>
-             </View>
-             <View>
-              <Image style={styles.icon3} source={SETTING}  ></Image>
-             </View>
-
-
-            </View>
-
+          <ScrollView showsHorizontalScrollIndicator={false}>
+          <View style={styles.tab}>  
+              {data.map((item: Item) => (
+                <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
+              ))}     
           </View>
-          
+        </ScrollView>
+
         )}
-
-
       </View>
     </SafeAreaView>
   );
 }
 
 
-const styles = StyleSheet.create( {
-  button2:{
-    width: 700,
-    height: 55,
-    top:110,
-    backgroundColor: Colors.WHITE,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  icon3:{
-    height: 22,
-    width: 23,
-    top: -29,
-    right: 70,
-  },
-  icon2:{
-    height: 22,
-    width: 60,
-    top: -9,
-    right: 180,
-  },
-    test1:{
-    fontSize: 12,
-    fontFamily: fontFamily.Bold,
-    height: 22,
-    width: 70,
-    top: 32,
-    right: 270,
-  },
-  icon1: {
-    height: 22,
-    width: 23,
-    top: 32,
-    right: 280,
-
-  },
-  button1: {
-    width: 700,
-    height: 55,
-    top:410,
-    backgroundColor: Colors.WHITE,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 24
+    flex: 1,
+    paddingTop:21,
+    paddingHorizontal: 24,
   },
   switchButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
     marginTop: 17,
     height: '100%',
+    backgroundColor: Colors.GRAY_PALE2
   },
   bordertab: {
     width: '100%',
-
-    height: 56,
+    height: 57,
     borderColor: Colors.YELLOW,
     borderWidth: 1,
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: Colors.GRAY_PALE2
   },
   button: {
     width: '50%',
-    height: 55,
+    height: 54,
     backgroundColor: Colors.YELLOW,
-    borderRadius: 12,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
   text: {
     fontSize: 16,
-    fontFamily: fontFamily.Bold
+    fontFamily: fontFamily.Bold,
+    color: Colors.GRAY_TEXT
   },
   tab: {
     width: '100%',
     height: '90%',
-    marginTop: 35
+    marginTop: 35,
+    backgroundColor: Colors.GRAY_PALE2,
   },
-  icon: {
-    height: 20,
-    width: 18,
-    top: 35,
-    right: 100,
-
+  avatar: {
+    height: 35,
+    width: 35,
+    borderRadius: 100,
+    marginRight: 13
+  },
+  item: {
+    flexDirection: 'column',
+    marginHorizontal: 4,
+    height: 100,
+    borderRadius: 8,
+    backgroundColor: Colors.WHITE,
+    marginBottom: 21,
+    elevation: 4, // Độ cao của bóng
+    shadowColor: Colors.BLACK, // Màu sắc của bóng
+    shadowOpacity: 0.3, // Độ mờ của bóng (từ 0 đến 1)
+    shadowOffset: { width: 4, height: 0 }, // Độ dịch chuyển theo chiều ngang và dọc của bóng
+    shadowRadius: 4, // Bán kính của bóng,
+    paddingTop: 14,
+    paddingHorizontal: 16,
+    paddingBottom: 18,
+    justifyContent: 'space-between'
+  },
+  title: {
+    fontSize: 16,
+    fontFamily: fontFamily.Medium,
+    color: Colors.BLACK,
+    lineHeight: 25,
+    marginLeft: 5
+  },
+  row: {
+    flexDirection: 'row'
+  },
+  itemText: {
+    fontSize: 12,
+    fontFamily: fontFamily.Medium,
+    color: Colors.GRAY_TEXT,
+    marginRight: 10
   }
-  
+
 
 });
 

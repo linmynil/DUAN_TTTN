@@ -7,18 +7,19 @@ import {
 
 } from 'react-native';
 import { fontFamily } from './assets/fonts';
-import { Colors} from './assets';
+import { Colors } from './assets';
 import { Header } from './src/component/Header';
 import Report from './src/screens/staff/Report';
 import { Button } from './src/component/Button';
 import Detail from './src/screens/staff/Detail';
-import DetailTiepNhanSuCo from './src/screens/staff/DetailTiepNhanSuCo';
+import Home from './src/screens/lecturers/Home';
+import StackHome from './src/navigate/StackHome';
 
 function App(): JSX.Element {
   const [selectTab, setSelectTab] = useState(0);
   const [status, setstatus] = useState(true);
-  const handleButton= () =>{
-        setstatus(!status);
+  const handleButton = () => {
+    setstatus(!status);
   }
 
   return (
@@ -32,10 +33,10 @@ function App(): JSX.Element {
     <Text style={styles.thin}>Huỳnh Thị Mỹ Linh  </Text>
     <Text style={styles.thin}>Huỳnh Thị Mỹ Linh  </Text> */}
       {/* đây là màn hình xem báo sự cố của nhân viên */}
-      <Report></Report>
+      {/* <Report></Report> */}
       {/* <Detail></Detail> */}
-      {/* <DetailTiepNhanSuCo></DetailTiepNhanSuCo> */}
-
+      <StackHome></StackHome>
+      {/* <Home></Home> */}
       {/* Sử dụng button truyền vào title và width, status chỉ truyền vào ở màn hình báo cáo sự cố */}
       {/* <Button status={status} title='Gửi yêu cầu' onPress={handleButton} viewStyle={{width:367}}></Button> */}
     </SafeAreaView>
@@ -44,6 +45,7 @@ function App(): JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
+    flex:1
   },
   black: {
     fontFamily: 'Roboto-Thin',
