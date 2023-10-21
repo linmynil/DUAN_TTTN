@@ -1,3 +1,6 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
 import {
     Dimensions,
@@ -18,23 +21,23 @@ type PropsType = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const Home: React.FC<PropsType> = (props) => {
     const { navigation } = props;
-    const [role, setRole] = useState(0);
+    const [role, setRole] = useState(1);
     const [text, setText] = useState('');
     const [text2, setText2] = useState('');
     useEffect(() => {
-    // Xác định giá trị văn bản mới dựa trên điều kiện hoặc logic của bạn
-        const newValue1 = role == 0  ? 'Báo cáo sự cố' : 'Sự cố cần hỗ trợ';
+        // Xác định giá trị văn bản mới dựa trên điều kiện hoặc logic của bạn
+        const newValue1 = role == 0 ? 'Báo cáo sự cố' : 'Sự cố cần hỗ trợ';
         setText(newValue1);
-        const newValue2 = role == 0 ? 'Quản lí mượn phòng học, hội trường' : 'Tính sẵn sàng phòng học';
+        const newValue2 = role == 1 ? 'Quản lí mượn phòng học, hội trường' : 'Tính sẵn sàng phòng học';
         setText2(newValue2);
-    }, [role]); 
-    const handleButton=()=>{
-        if(role==0 ){
+    }, [role]);
+    
+    const handleButton = () => {
+        if (role == 0) {
             navigation.navigate('FormReport')
         }
-        else if(role==1){
-            navigation.navigate('Report') 
-           
+        else if (role == 1) {
+            navigation.navigate('Report')
         }
     }
     // Tham số thứ hai là một mảng rỗng để đảm bảo useEffect chỉ được gọi một lần khi component được tạo
@@ -69,8 +72,6 @@ const Home: React.FC<PropsType> = (props) => {
                 <Text style={styles.textcard} >{text2}</Text>
             </TouchableOpacity>
         </SafeAreaView>
-
-
     );
 }
 

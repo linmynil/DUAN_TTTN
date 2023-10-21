@@ -1,4 +1,15 @@
-import React, { useState } from 'react';
+/* eslint-disable prettier/prettier */
+/* eslint-disable quotes */
+/* eslint-disable jsx-quotes */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
+import React, { useState, useContext } from 'react';
 import {
     Dimensions,
     Image,
@@ -9,6 +20,7 @@ import {
     StatusBar,
     StyleSheet,
     Text,
+    ToastAndroid,
     TouchableOpacity,
     View,
 } from 'react-native';
@@ -18,8 +30,26 @@ import { RootStackParamList } from '../../navigate/StackHome';
 import { TextField } from '../../component/TextField';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { Button } from '../../component/Button';
+import axios from 'axios';
+import { LecturesContext } from '../utilities/LecturesContext';
 
+interface User {
+    // Định nghĩa các thuộc tính của đối tượng User
+    email: string;
+    password: string;
+    name: string;
+    phoneNumber: string;
+}
 
+interface LecturesContextProps {
+    isLoggedIn: boolean;
+    login: (email: string, password: string) => Promise<boolean>;
+    register: (email: string, password: string, phoneNumber: string, name: string) => Promise<boolean>;
+    user: User;
+    setUser: React.Dispatch<React.SetStateAction<User>>;
+    addNew_reports: (room: string, category: string, description: string) => Promise<boolean>;
+    getAllReport: () => Promise<boolean>;
+}
 
 type Item = {
     id: string;
@@ -33,75 +63,99 @@ type ItemProps = {
 
 type PropsType = NativeStackScreenProps<RootStackParamList, 'Login'>;
 const Login: React.FC<PropsType> = props => {
+    const { login } = useContext(LecturesContext);
+    console.log("================================", login);
+
     const { navigation } = props;
     const [toggle, setToggle] = useState(false);
     const [toggleStaff, setToggleStaff] = useState(false);
     const [selectedId, setSelectedId] = useState<string>();
     const [modalVisible, setModalVisible] = useState(false);
-    const [email, setEmail] = useState<string>('');
+    const [email, setEmail] = useState<string>('12345@gmail.com');
     const handleOnchangeEmail = (value: string) => {
         setEmail(value);
-        console.log(value)
-    }
-    const [password, setPassword] = useState<string>('');
+        console.log(value);
+    };
+    const [password, setPassword] = useState<string>('12345');
     const handleOnchangePassword = (value: string) => {
         setPassword(value);
-        console.log(value)
-    }
+        console.log(value);
+    };
 
     const [hidePassword, setHidePassword] = useState(true);
     const managePasswordVisibility = () => {
         setHidePassword(!hidePassword);
-        console.log(hidePassword)
+        console.log(hidePassword);
     };
 
     const [checkboxState, setCheckboxState] = useState(false);
     const checkRemember = () => {
         setCheckboxState(!checkboxState);
-    }
+    };
     const handleToggle = () => {
         setToggle(!toggle);
         setToggleStaff(false);
-    }
+    };
     const handleToggleStaff = () => {
         setToggleStaff(!toggleStaff);
         setToggle(false);
-    }
+    };
 
     const [data, setData] = React.useState<Item[]>(
         [{
             id: '1',
-            title: 'Hồ Chí Minh'
+            title: 'Hồ Chí Minh',
         },
         {
             id: '2',
-            title: 'Đà Nẵng'
+            title: 'Đà Nẵng',
         },
         {
             id: '3',
-            title: 'Hà Nội'
+            title: 'Hà Nội',
         },
         {
             id: '4',
-            title: 'Cần Thơ'
+            title: 'Cần Thơ',
         },
         {
             id: '5',
-            title: 'Tây Nguyên'
+            title: 'Tây Nguyên',
 
         },
         ]
     );
+
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post("http://192.168.1.10:3000/users/login", {
+                email: email,
+                password: password,
+            });
+            // Lấy thông tin người dùng từ phản hồi
+            const userData = response.data.user;
+            const avatar = userData.avatar;
+            const role = userData.role;
+            const phone = userData.phone;
+            console.log(avatar + role + phone);
+
+            console.log(response);
+            ToastAndroid.show('Login Success', ToastAndroid.SHORT);
+            navigation.navigate('Home');
+        } catch (error) {
+            console.error(error);
+            ToastAndroid.show('Login Failed', ToastAndroid.SHORT);
+        }
+    };
 
     const Item = ({ item, onPress }: ItemProps) => (
         <TouchableOpacity onPress={onPress} style={[styles.item, { backgroundColor: item.id === selectedId ? Colors.YELLOW : Colors.YELLOW_PALE }]}>
             <Text style={[styles.text2, { color: item.id === selectedId ? Colors.WHITE : Colors.GRAY_TEXT2 }]}>{item.title}</Text>
         </TouchableOpacity>
     );
-
     const handleSelect = (item: Item) => {
         setSelectedId(item.id);
-        console.log(item.title)
+        console.log(item.title);
         setModalVisible(!modalVisible);
     }
     return (
@@ -140,7 +194,7 @@ const Login: React.FC<PropsType> = props => {
                 </View>
 
                 <View style={styles.button}>
-                    <Text style={[styles.text2,{width:Dimensions.get('window').width * 0.4}]}>Chọn cơ sở đào tạo</Text>
+                    <Text style={[styles.text2, { width: Dimensions.get('window').width * 0.4 }]}>Chọn cơ sở đào tạo</Text>
                     <TouchableOpacity onPress={() => setModalVisible(true)}>
                         <Image
                             source={ARROW_DOWN}
@@ -159,8 +213,7 @@ const Login: React.FC<PropsType> = props => {
                                     <ScrollView
                                         showsHorizontalScrollIndicator={false}>
                                         {data.map((item: Item) => (
-                                            <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
-                                        ))}
+                                            <Item item={item} key={item.id} onPress={() => handleSelect(item)} />))}
                                     </ScrollView>
                                 </View>
                             </View>
@@ -183,36 +236,30 @@ const Login: React.FC<PropsType> = props => {
                     hidePassword={hidePassword}
                     onPressRight={managePasswordVisibility}
                     viewStyle={{ alignSelf: 'center', width: Dimensions.get('window').width * 0.86 }} ></TextField>
-                <View style={[styles.row,{justifyContent:'space-between',width: Dimensions.get('window').width * 0.86, marginTop:39}]}>
+                <View style={[styles.row, { justifyContent: 'space-between', width: Dimensions.get('window').width * 0.86, marginTop: 39 }]}>
                     <View style={styles.checkbox}>
                         <BouncyCheckbox
                             size={24}
                             fillColor={Colors.YELLOW}
                             unfillColor={Colors.WHITE}
                             iconStyle={{ borderRadius: 2, borderColor: Colors.YELLOW }}
-                            innerIconStyle={{ borderRadius: 2, borderWidth: 1,borderColor: Colors.GRAY_TEXT2 }}
+                            innerIconStyle={{ borderRadius: 2, borderWidth: 1, borderColor: Colors.GRAY_TEXT2 }}
                             onPress={checkRemember}
                             isChecked={checkboxState}
                         />
-                        <Text style={[styles.text2, {color:Colors.GRAY_TEXT, }]}>Remember password</Text>
+                        <Text style={[styles.text2, { color: Colors.GRAY_TEXT, }]}>Remember password</Text>
                     </View>
                     <Pressable onPress={() => { navigation.navigate("Register"); }}>
-                    <Text  style={[styles.text2, {color:Colors.BLUE, }]}>Forget password</Text>
+                        <Text style={[styles.text2, { color: Colors.BLUE, }]}>Forget password</Text>
                     </Pressable>
-
                 </View>
-                <Button status={true} title='Đăng nhập' onPress={()=>{navigation.navigate('Home')}} viewStyle={{width: Dimensions.get('window').width * 0.86, position: 'absolute',bottom: -70,zIndex:0}}></Button>               
+                <Button status={true} title='Đăng nhập' onPress={() => {
+                    handleLogin(); console.log(">>>>");
+                }} viewStyle={{ width: Dimensions.get('window').width * 0.86, position: 'absolute', bottom: -70, zIndex: 0 }}></Button>
             </View>
-
-
-
         </SafeAreaView>
-
-
     );
-}
-
-
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -221,11 +268,10 @@ const styles = StyleSheet.create({
 
     backgroundImage: {
         width: Dimensions.get('window').width * 1,
-        height:100,
+        height: 100,
         resizeMode: 'stretch',
         position: 'absolute',
         bottom: 0,
-        zIndex: -1
 
     },
     imageLogin: {
@@ -319,13 +365,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         borderRadius: 20,
+        width: Dimensions.get('window').width * 0.45,
+        justifyContent: 'center',
     },
     checkbox: {
         flexDirection: "row",
         justifyContent: "flex-start",
-      
     }
-
 });
-
 export default Login;

@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 
 import React from 'react';
 import { Dimensions, Image, ImageSourcePropType, ImageStyle, Pressable, StyleProp, StyleSheet, Text, TextInput, TextProps, TextStyle, View, ViewProps, ViewStyle } from 'react-native';
-import { Colors, EYE, fontFamily } from '../../assets';
+import { Colors, EYE, EYE_DISABLE, fontFamily } from '../../assets';
 
 type Props = {
     imageIconLeft: ImageSourcePropType;
@@ -27,7 +28,7 @@ const _TextField: React.FC<Props> = (props) => {
                 <TextInput secureTextEntry={hidePassword} placeholder={label} value={value} style={[_styles.input, { fontFamily: value.length == 0 ? fontFamily.Regular : fontFamily.Bold, color: value.length == 0 ? Colors.GRAY : Colors.BLACK, fontSize: value.length == 0 ? 12 : 14 }]} onChangeText={onChangeText} ></TextInput>
             </View>
             <Pressable onPress={onPressRight} >
-                <Image source={hidePassword? EYE: EYE} style={StyleSheet.flatten([_styles.iconRight, props.iconRightStyle])} />
+                <Image source={hidePassword? EYE: EYE_DISABLE} style={StyleSheet.flatten([_styles.iconRight, props.iconRightStyle])} />
             </Pressable>
         </Pressable>
     )
@@ -61,8 +62,8 @@ const _styles = StyleSheet.create({
         opacity: 1
     },
     iconRight: {
-        width: 16,
-        height: 10,
+        width: 20,
+        height: 20,
         marginLeft: 10,
         opacity: 1
     }

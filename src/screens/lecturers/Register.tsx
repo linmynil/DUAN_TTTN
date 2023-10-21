@@ -1,4 +1,11 @@
-import React, { useState } from 'react';
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
+import React, { useState, useContext } from 'react';
 import {
     Dimensions,
     Image,
@@ -9,6 +16,7 @@ import {
     StatusBar,
     StyleSheet,
     Text,
+    ToastAndroid,
     TouchableOpacity,
     View,
 } from 'react-native';
@@ -16,11 +24,8 @@ import { ARROW_DOWN, Colors, EMAIL, IMAGE_LOGIN, LOGO, PASSWORD, PHONE, PHONE_CL
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigate/StackHome';
 import { TextField } from '../../component/TextField';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { Button } from '../../component/Button';
-
-
-
+import { LecturesContext } from '../utilities/LecturesContext';
 type Item = {
     id: string;
     title: string
@@ -34,77 +39,49 @@ type ItemProps = {
 type PropsType = NativeStackScreenProps<RootStackParamList, 'Register'>;
 const Register: React.FC<PropsType> = props => {
     const { navigation } = props;
-
     const [selectedId, setSelectedId] = useState<string>();
     const [modalVisible, setModalVisible] = useState(false);
-    const [phone, setPhone] = useState<string>('');
+    const { register } = useContext(LecturesContext);
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
     const handleOnchangePhone = (value: string) => {
-        setPhone(value);
-        console.log(value)
-    }
+        setPhoneNumber(value);
+        console.log(value);
+    };
     const [name, setName] = useState<string>('');
     const handleOnchangeName = (value: string) => {
         setName(value);
-        console.log(value)
-    }
+        console.log(value);
+    };
     const [email, setEmail] = useState<string>('');
     const handleOnchangeEmail = (value: string) => {
         setEmail(value);
-        console.log(value)
-    }
+        console.log(value);
+    };
     const [password, setPassword] = useState<string>('');
     const handleOnchangePassword = (value: string) => {
         setPassword(value);
-        console.log(value)
-    }
+        console.log(value);
+    };
 
     const [hidePassword, setHidePassword] = useState(true);
     const managePasswordVisibility = () => {
         setHidePassword(!hidePassword);
-        console.log(hidePassword)
+        console.log(hidePassword);
     };
 
-    const [checkboxState, setCheckboxState] = useState(false);
-    const checkRemember = () => {
-        setCheckboxState(!checkboxState);
-    }
-
-    const [data, setData] = React.useState<Item[]>(
-        [{
-            id: '1',
-            title: 'Hồ Chí Minh'
-        },
-        {
-            id: '2',
-            title: 'Đà Nẵng'
-        },
-        {
-            id: '3',
-            title: 'Hà Nội'
-        },
-        {
-            id: '4',
-            title: 'Cần Thơ'
-        },
-        {
-            id: '5',
-            title: 'Tây Nguyên'
-
-        },
-        ]
-    );
-
-    const Item = ({ item, onPress }: ItemProps) => (
-        <TouchableOpacity onPress={onPress} style={[styles.item, { backgroundColor: item.id === selectedId ? Colors.YELLOW : Colors.YELLOW_PALE }]}>
-            <Text style={[styles.text2, { color: item.id === selectedId ? Colors.WHITE : Colors.GRAY_TEXT2 }]}>{item.title}</Text>
-        </TouchableOpacity>
-    );
-
-    const handleSelect = (item: Item) => {
-        setSelectedId(item.id);
-        console.log(item.title)
-        setModalVisible(!modalVisible);
-    }
+    //handle call api
+    // const handleRegister = async () => {
+    //     const res = await register(email, password, phoneNumber, name);
+    //     console.log('res', res);
+    //     if (res) {
+    //         ToastAndroid.show('Register success', ToastAndroid.LONG);
+    //         navigation.navigate('Login');
+    //     } else {
+    //         ToastAndroid.show('Register failed', ToastAndroid.LONG);
+    //         setEmail('');
+    //         setPassword('');
+    //     }
+    // }
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="dark-content"
@@ -123,14 +100,14 @@ const Register: React.FC<PropsType> = props => {
                     source={LOGO}
                     style={styles.logo}
                 />
-                <Text style={styles.title} >Dịch vụ trực tuyến</Text>
-               <TextField
+                <Text style={styles.title} >Đăng ký tài khoản</Text>
+                <TextField
                     imageIconLeft={USER}
                     iconLeftStyle={{ height: 22, width: 22 }}
                     label='Tên đăng nhập'
                     iconRightStyle={{ opacity: 0 }}
                     value={name}
-                    onChangeText={handleOnchangeEmail}
+                    onChangeText={handleOnchangeName}
                     viewStyle={{ width: Dimensions.get('window').width * 0.86, alignSelf: 'center' }} ></TextField>
                 <TextField
                     imageIconLeft={EMAIL}
@@ -148,27 +125,20 @@ const Register: React.FC<PropsType> = props => {
                     hidePassword={hidePassword}
                     onPressRight={managePasswordVisibility}
                     viewStyle={{ alignSelf: 'center', width: Dimensions.get('window').width * 0.86 }} ></TextField>
-                    <TextField
+                <TextField
                     imageIconLeft={PHONE_REGISTER}
                     iconLeftStyle={{ height: 22, width: 22 }}
                     label='Số điện thoại'
                     iconRightStyle={{ opacity: 0 }}
-                    value={name}
-                    onChangeText={handleOnchangeEmail}
+                    value={phoneNumber + ""}
+                    onChangeText={handleOnchangePhone}
                     viewStyle={{ width: Dimensions.get('window').width * 0.86, alignSelf: 'center' }} ></TextField>
-                <Button status={true} title='Đăng kí' onPress={()=>{navigation.navigate('Login')}} viewStyle={{width: Dimensions.get('window').width * 0.86, position: 'absolute',bottom: -70,zIndex:0}}></Button>
-                
+                <Button status={true} title='Đăng kí' onPress={() => navigation.navigate('Login')} viewStyle={{ width: Dimensions.get('window').width * 0.86, position: 'absolute', bottom: -70, zIndex: 0 }}></Button>
+
             </View>
-
-
-
         </SafeAreaView>
-
-
     );
-}
-
-
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -177,7 +147,7 @@ const styles = StyleSheet.create({
 
     backgroundImage: {
         width: Dimensions.get('window').width * 1,
-        height:100,
+        height: 100,
         resizeMode: 'stretch',
         position: 'absolute',
         bottom: 0,
@@ -213,14 +183,14 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 
- 
+
     text2: {
         fontFamily: fontFamily.Regular,
         fontSize: 14,
         color: Colors.GRAY_TEXT2,
         textAlign: 'center'
     },
-  
+
     item: {
         backgroundColor: Colors.YELLOW_PALE,
         height: 30,
@@ -232,7 +202,7 @@ const styles = StyleSheet.create({
     checkbox: {
         flexDirection: "row",
         justifyContent: "flex-start",
-      
+
     },
     title: {
         color: Colors.BLACK,

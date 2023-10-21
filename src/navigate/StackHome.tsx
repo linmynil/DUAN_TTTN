@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-trailing-spaces */
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -33,10 +35,8 @@ const StackHome = () => {
   return (
     <NavigationContainer >
       <Stack.Navigator 
-       initialRouteName="Register"
-        screenOptions={{
-          headerShown: false,
-        }}>
+       initialRouteName="Login"
+        screenOptions={{ headerShown: false}}>
         <Stack.Screen name="Login" component={Login} />
         {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}
         <Stack.Screen name="FormReport" component={FormReport} />

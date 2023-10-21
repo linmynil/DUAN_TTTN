@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, ImageSourcePropType, StatusBar }
   from 'react-native';
 import { Header } from '../../component/Header';
-import { Colors, ELLIPSE, IMAGE_LOGIN, fontFamily } from '../../../assets'
+import { Colors, IMAGE_LOGIN, fontFamily } from '../../../assets'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigate/StackHome';
+import { LecturesContext } from '../utilities/LecturesContext';
+import axios from 'axios';
 
 type Item = {
   id: string;
-  title: string;
   avatar: ImageSourcePropType;
-  name: string;
+  nameUser: string;
   room: string;
   time: string;
+  description: string;
 };
 
 type ItemProps = {
@@ -25,11 +30,11 @@ const Item = ({ item, onPress }: ItemProps) => {
   const timedetail = time.substring(11, 19);
   return (
     <TouchableOpacity onPress={onPress} style={styles.item}>
-      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.title}>{item.description}</Text>
       <View style={styles.row}>
         <Image style={styles.avatar} source={item.avatar}  ></Image>
         <View>
-          <Text style={[styles.title, { fontSize: 13 }]}>{item.name}</Text>
+          <Text style={[styles.title, { fontSize: 13 }]}>{item.nameUser}</Text>
           <View style={styles.row}>
             <Text style={styles.itemText}>Phòng: {item.room}</Text>
             <Text style={styles.itemText}>{timedetail}</Text>
@@ -37,71 +42,81 @@ const Item = ({ item, onPress }: ItemProps) => {
           </View>
         </View>
       </View>
-
     </TouchableOpacity>
-  )
+  );
 
 };
 type PropsType = NativeStackScreenProps<RootStackParamList, 'Report'>;
 const Report: React.FC<PropsType> = props => {
-    const { navigation } = props;
+  const { navigation } = props;
   const [selectTab, setSelectTab] = useState(0);
-  const [data, setData] = React.useState<Item[]>(
-    [{
-      id: '1',
-      title: 'Sự cố máy chiếu hỏng',
-      avatar: IMAGE_LOGIN,
-      name: 'Lê Minh Hiếu',
-      room: 'T1103',
-      time: '2023-10-18T12:34:56'
-    },
-    {
-      id: '2',
-      title: 'Sự cố máy chiếu hỏng',
-      avatar: IMAGE_LOGIN,
-      name: 'Lê Minh Hiếu',
-      room: 'T1103',
-      time: '2023-10-18T12:34:56'
-    },
-    {
-      id: '3',
-      title: 'Sự cố máy chiếu hỏng',
-      avatar: IMAGE_LOGIN,
-      name: 'Lê Minh Hiếu',
-      room: 'T1103',
-      time: '2023-10-18T12:34:56'
-    },
-    {
-      id: '4',
-      title: 'Sự cố máy chiếu hỏng',
-      avatar: IMAGE_LOGIN,
-      name: 'Lê Minh Hiếu',
-      room: 'T1103',
-      time: '2023-10-18T12:34:56'
-    },
-    {
-      id: '5',
-      title: 'Sự cố máy chiếu hỏng',
-      avatar: IMAGE_LOGIN,
-      name: 'Lê Minh Hiếu',
-      room: 'T1103',
-      time: '2023-10-18T12:34:56'
-    },
-    ]
+  const [dataReports, setDataReports] = React.useState<Item[]>(
+    // [{
+    //   id: '1',
+    //   title: 'Sự cố máy chiếu hỏng',
+    //   avatar: IMAGE_LOGIN,
+    //   name: 'Lê Minh Hiếu',
+    //   room: 'T1103',
+    //   time: '2023-10-18T12:34:56'
+    // },
+    // {
+    //   id: '2',
+    //   title: 'Sự cố máy chiếu hỏng',
+    //   avatar: IMAGE_LOGIN,
+    //   name: 'Lê Minh Hiếu',
+    //   room: 'T1103',
+    //   time: '2023-10-18T12:34:56'
+    // },
+    // {
+    //   id: '3',
+    //   title: 'Sự cố máy chiếu hỏng',
+    //   avatar: IMAGE_LOGIN,
+    //   name: 'Lê Minh Hiếu',
+    //   room: 'T1103',
+    //   time: '2023-10-21T00:59:29.042Z'
+    // },
+    // {
+    //   id: '4',
+    //   title: 'Sự cố máy chiếu hỏng',
+    //   avatar: IMAGE_LOGIN,
+    //   name: 'Lê Minh Hiếu',
+    //   room: 'T1103',
+    //   time: '2023-10-18T12:34:56'
+    // },
+    // {
+    //   id: '5',
+    //   title: 'Sự cố máy chiếu hỏng',
+    //   avatar: IMAGE_LOGIN,
+    //   name: 'Lê Minh Hiếu',
+    //   room: 'T1103',
+    //   time: '2023-10-20T16:55:31.317+00:00'
+    // },
+    // ]
   );
-
-
-
-  const handleSelect = (item:Item) => {
+  const handleSelect = (item: Item) => {
     navigation.navigate('Detail');
-          console.log(item.id)
-  }  
+    console.log(item.id);
+  };
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://192.168.1.10:3000/report/getALL_reportsApp");
+      const reportData = response.data;
+      console.log("==========================", reportData);
+      setDataReports(reportData);
+      // console.log("============DATANENENENE==============",data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content"
-                backgroundColor={'transparent'}
-                translucent />
-      <Header title='Sự cố 'onPress={()=>navigation.goBack()}></Header>
+        backgroundColor={'transparent'}
+        translucent />
+      <Header title='Sự cố ' onPress={() => navigation.goBack()}></Header>
       <View style={styles.switchButton}>
         <View style={styles.bordertab}>
           <TouchableOpacity onPress={() => setSelectTab(0)} style={[styles.button, { backgroundColor: selectTab == 0 ? Colors.YELLOW : Colors.WHITE }]}>
@@ -113,33 +128,32 @@ const Report: React.FC<PropsType> = props => {
         </View>
         {selectTab == 0 ? (
           <ScrollView showsHorizontalScrollIndicator={false}>
-            <View style={styles.tab}>  
-                {data.map((item: Item) => (
-                  <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
-                ))}     
+            <View style={styles.tab}>
+              {dataReports?.map((item: Item) => (
+                <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
+              ))}
             </View>
           </ScrollView>
 
         ) : (
           <ScrollView showsHorizontalScrollIndicator={false}>
-          <View style={styles.tab}>  
-              {data.map((item: Item) => (
+            <View style={styles.tab}>
+              {dataReports?.map((item: Item) => (
                 <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
-              ))}     
-          </View>
-        </ScrollView>
-
+              ))}
+            </View>
+          </ScrollView>
         )}
       </View>
     </SafeAreaView>
   );
-}
+};
 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:21,
+    paddingTop: 21,
     paddingHorizontal: 24,
   },
   switchButton: {
