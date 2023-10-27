@@ -31,7 +31,6 @@ import { TextField } from '../../component/TextField';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { Button } from '../../component/Button';
 import axios from 'axios';
-import { LecturesContext } from '../utilities/LecturesContext';
 
 type Item = {
     id: string;
@@ -45,19 +44,17 @@ type ItemProps = {
 
 type PropsType = NativeStackScreenProps<RootStackParamList, 'Login'>;
 const Login: React.FC<PropsType> = props => {
-    const { login } = useContext(LecturesContext);
-    console.log("================================", login);
     const { navigation } = props;
     const [toggle, setToggle] = useState(false);
     const [toggleStaff, setToggleStaff] = useState(false);
     const [selectedId, setSelectedId] = useState<string>();
     const [modalVisible, setModalVisible] = useState(false);
-    const [email, setEmail] = useState<string>('12345@gmail.com');
+    const [email, setEmail] = useState<string>('');
     const handleOnchangeEmail = (value: string) => {
         setEmail(value);
         console.log(value);
     };
-    const [password, setPassword] = useState<string>('12345');
+    const [password, setPassword] = useState<string>('');
     const handleOnchangePassword = (value: string) => {
         setPassword(value);
         console.log(value);
@@ -81,6 +78,7 @@ const Login: React.FC<PropsType> = props => {
         setToggleStaff(!toggleStaff);
         setToggle(false);
     };
+    
 
     const [data, setData] = React.useState<Item[]>(
         [{
@@ -109,33 +107,18 @@ const Login: React.FC<PropsType> = props => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post("http://192.168.1.9:3000/user/login", {
+            const response = await axios.post("http://192.168.1.17:3000/user/login", {
                 email: email,
                 password: password,
             });
-            // Lấy thông tin người dùng từ phản hồi
-            // const userData = response.data.user;
-            // const avatar = userData.avatar;
-            // const role = userData.role;
-            // const phone = userData.phone;
-            // console.log(avatar + role + phone);
-            console.log(response);
+            console.log('=>>>>>>',response.data.user.role);          
             ToastAndroid.show('Login Success', ToastAndroid.SHORT);
-            navigation.navigate('Home');
+            navigation.navigate('Home',{role:response.data.user.role});
         } catch (error) {
             console.error(error);
             ToastAndroid.show('Login Failed', ToastAndroid.SHORT);
         }
     };
-
-    // const handleLogin = async () => {
-    //     const success = await login(email, password);
-    //     if (success) {
-    //         console.log("Login Success"); 
-    //     }else{
-    //         console.log("Login Failed");
-    //     }
-    // };
     const Item = ({ item, onPress }: ItemProps) => (
         <TouchableOpacity onPress={onPress} style={[styles.item, { backgroundColor: item.id === selectedId ? Colors.YELLOW : Colors.YELLOW_PALE }]}>
             <Text style={[styles.text2, { color: item.id === selectedId ? Colors.WHITE : Colors.GRAY_TEXT2 }]}>{item.title}</Text>

@@ -18,10 +18,9 @@ import { RootStackParamList } from '../../navigate/StackHome';
 
 
 type PropsType = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
 const Home: React.FC<PropsType> = (props) => {
-    const { navigation } = props;
-    const [role, setRole] = useState(1);
+    const { route,navigation } = props;
+    const role = route.params?.role;
     const [text, setText] = useState('');
     const [text2, setText2] = useState('');
     useEffect(() => {

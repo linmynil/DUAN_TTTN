@@ -12,7 +12,9 @@ import Detail from '../screens/staff/Detail';
 import Register from '../screens/lecturers/Register';
 
 type LoginProps={};
-type HomeProps={};
+type HomeProps={
+  role:number
+};
 type FormReportProps={};
 type StepsReportProps={};
 type ReportProps={};
