@@ -22,11 +22,14 @@ const Home: React.FC<PropsType> = (props) => {
     const { route,navigation } = props;
     const role = route.params?.role;
     const [text, setText] = useState('');
+    const [text1, setText1] = useState('');
     const [text2, setText2] = useState('');
     useEffect(() => {
         // Xác định giá trị văn bản mới dựa trên điều kiện hoặc logic của bạn
+        const newValue = role == 0 ? 'Giảng viên' : 'Nhân viên';
+        setText(newValue);
         const newValue1 = role == 0 ? 'Báo cáo sự cố' : 'Sự cố cần hỗ trợ';
-        setText(newValue1);
+        setText1(newValue1);
         const newValue2 = role == 1 ? 'Quản lí mượn phòng học, hội trường' : 'Tính sẵn sàng phòng học';
         setText2(newValue2);
     }, [role]);
@@ -50,7 +53,7 @@ const Home: React.FC<PropsType> = (props) => {
                     <Image style={styles.avatar} source={IMAGE_LOGIN}></Image>
                     <View>
                         <Text style={styles.text1} >Xin chào,</Text>
-                        <Text style={styles.text2} >Giảng viên</Text>
+                        <Text style={styles.text2} >{text}</Text>
                     </View>
                 </View>
                 <TouchableOpacity onPress={() => { }} >
@@ -60,7 +63,7 @@ const Home: React.FC<PropsType> = (props) => {
             <Text style={styles.title} >Dịch vụ trực tuyến</Text>
             <TouchableOpacity onPress={handleButton} style={styles.card}>
                 <Image source={EDIT}></Image>
-                <Text style={styles.textcard}>{text}</Text>
+                <Text style={styles.textcard}>{text1}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { }} style={[styles.card, { display: role == 0 ? 'flex' : 'none' }]}>
                 <Image source={INTERNET}></Image>

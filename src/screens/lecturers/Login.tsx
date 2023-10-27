@@ -45,8 +45,9 @@ type ItemProps = {
 type PropsType = NativeStackScreenProps<RootStackParamList, 'Login'>;
 const Login: React.FC<PropsType> = props => {
     const { navigation } = props;
-    const [toggle, setToggle] = useState(false);
-    const [toggleStaff, setToggleStaff] = useState(false);
+    // const [toggle, setToggle] = useState(false);
+    const [text, setText] = useState('Chọn cơ sở đào tạo');
+    // const [toggleStaff, setToggleStaff] = useState(false);
     const [selectedId, setSelectedId] = useState<string>();
     const [modalVisible, setModalVisible] = useState(false);
     const [email, setEmail] = useState<string>('');
@@ -70,14 +71,14 @@ const Login: React.FC<PropsType> = props => {
     const checkRemember = () => {
         setCheckboxState(!checkboxState);
     };
-    const handleToggle = () => {
-        setToggle(!toggle);
-        setToggleStaff(false);
-    };
-    const handleToggleStaff = () => {
-        setToggleStaff(!toggleStaff);
-        setToggle(false);
-    };
+    // const handleToggle = () => {
+    //     setToggle(!toggle);
+    //     setToggleStaff(false);
+    // };
+    // const handleToggleStaff = () => {
+    //     setToggleStaff(!toggleStaff);
+    //     setToggle(false);
+    // };
     
 
     const [data, setData] = React.useState<Item[]>(
@@ -126,7 +127,7 @@ const Login: React.FC<PropsType> = props => {
     );
     const handleSelect = (item: Item) => {
         setSelectedId(item.id);
-        console.log(item.title);
+        setText(item.title)
         setModalVisible(!modalVisible);
     }
     return (
@@ -147,7 +148,7 @@ const Login: React.FC<PropsType> = props => {
                     source={LOGO}
                     style={styles.logo}
                 />
-                <View style={[styles.row, { marginTop: 29, marginBottom: 33 }]}>
+                {/* <View style={[styles.row, { marginTop: 29, marginBottom: 33 }]}>
                     <TouchableOpacity onPress={handleToggle}>
                         <Image
                             source={toggle ? TOGGLE_CLICK : TOGGLE}
@@ -162,10 +163,10 @@ const Login: React.FC<PropsType> = props => {
                         />
                     </TouchableOpacity>
                     <Text style={styles.text}>Nhân viên</Text>
-                </View>
+                </View> */}
 
                 <View style={styles.button}>
-                    <Text style={[styles.text2, { width: Dimensions.get('window').width * 0.4 }]}>Chọn cơ sở đào tạo</Text>
+                    <Text style={[styles.text2, { width: Dimensions.get('window').width * 0.4 }]}>{text}</Text>
                     <TouchableOpacity onPress={() => setModalVisible(true)}>
                         <Image
                             source={ARROW_DOWN}
@@ -299,6 +300,7 @@ const styles = StyleSheet.create({
 
     },
     button: {
+        marginTop:35,
         flexDirection: 'row',
         width: Dimensions.get('window').width * 0.86,
         borderRadius: 12,
