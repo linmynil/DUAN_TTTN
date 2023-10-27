@@ -33,24 +33,6 @@ import { Button } from '../../component/Button';
 import axios from 'axios';
 import { LecturesContext } from '../utilities/LecturesContext';
 
-interface User {
-    // Định nghĩa các thuộc tính của đối tượng User
-    email: string;
-    password: string;
-    name: string;
-    phoneNumber: string;
-}
-
-interface LecturesContextProps {
-    isLoggedIn: boolean;
-    login: (email: string, password: string) => Promise<boolean>;
-    register: (email: string, password: string, phoneNumber: string, name: string) => Promise<boolean>;
-    user: User;
-    setUser: React.Dispatch<React.SetStateAction<User>>;
-    addNew_reports: (room: string, category: string, description: string) => Promise<boolean>;
-    getAllReport: () => Promise<boolean>;
-}
-
 type Item = {
     id: string;
     title: string
@@ -65,7 +47,6 @@ type PropsType = NativeStackScreenProps<RootStackParamList, 'Login'>;
 const Login: React.FC<PropsType> = props => {
     const { login } = useContext(LecturesContext);
     console.log("================================", login);
-
     const { navigation } = props;
     const [toggle, setToggle] = useState(false);
     const [toggleStaff, setToggleStaff] = useState(false);
@@ -128,17 +109,16 @@ const Login: React.FC<PropsType> = props => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post("http://192.168.1.10:3000/users/login", {
+            const response = await axios.post("http://192.168.1.9:3000/user/login", {
                 email: email,
                 password: password,
             });
             // Lấy thông tin người dùng từ phản hồi
-            const userData = response.data.user;
-            const avatar = userData.avatar;
-            const role = userData.role;
-            const phone = userData.phone;
-            console.log(avatar + role + phone);
-
+            // const userData = response.data.user;
+            // const avatar = userData.avatar;
+            // const role = userData.role;
+            // const phone = userData.phone;
+            // console.log(avatar + role + phone);
             console.log(response);
             ToastAndroid.show('Login Success', ToastAndroid.SHORT);
             navigation.navigate('Home');
@@ -148,6 +128,14 @@ const Login: React.FC<PropsType> = props => {
         }
     };
 
+    // const handleLogin = async () => {
+    //     const success = await login(email, password);
+    //     if (success) {
+    //         console.log("Login Success"); 
+    //     }else{
+    //         console.log("Login Failed");
+    //     }
+    // };
     const Item = ({ item, onPress }: ItemProps) => (
         <TouchableOpacity onPress={onPress} style={[styles.item, { backgroundColor: item.id === selectedId ? Colors.YELLOW : Colors.YELLOW_PALE }]}>
             <Text style={[styles.text2, { color: item.id === selectedId ? Colors.WHITE : Colors.GRAY_TEXT2 }]}>{item.title}</Text>

@@ -26,8 +26,8 @@ type ItemProps = {
 };
 const Item = ({ item, onPress }: ItemProps) => {
   const time = item.time;
-  const date = time.substring(0, 10);
-  const timedetail = time.substring(11, 19);
+  // const date = time.substring(0, 10);
+  // const timedetail = time.substring(11, 19);
   return (
     <TouchableOpacity onPress={onPress} style={styles.item}>
       <Text style={styles.title}>{item.description}</Text>
@@ -37,8 +37,7 @@ const Item = ({ item, onPress }: ItemProps) => {
           <Text style={[styles.title, { fontSize: 13 }]}>{item.nameUser}</Text>
           <View style={styles.row}>
             <Text style={styles.itemText}>Phòng: {item.room}</Text>
-            <Text style={styles.itemText}>{timedetail}</Text>
-            <Text style={styles.itemText}>{date}</Text>
+            <Text style={styles.itemText}>{item.time}</Text>
           </View>
         </View>
       </View>
@@ -99,7 +98,7 @@ const Report: React.FC<PropsType> = props => {
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.10:3000/report/getALL_reportsApp");
+      const response = await axios.get("http://192.168.1.9:3000/report/getALL_reportsApp");
       const reportData = response.data;
       console.log("==========================", reportData);
       setDataReports(reportData);
