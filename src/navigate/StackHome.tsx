@@ -11,24 +11,24 @@ import Report from '../screens/staff/Report';
 import Detail from '../screens/staff/Detail';
 import Register from '../screens/lecturers/Register';
 
-type LoginProps={};
-type HomeProps={
-  role:number
+type LoginProps = {};
+type HomeProps = {
+  role: number
 };
-type FormReportProps={};
-type StepsReportProps={};
-type ReportProps={};
-type DetailProps={};
-type RegisterProps={};
+type FormReportProps = {};
+type StepsReportProps = {};
+type ReportProps = {};
+type DetailProps = {};
+type RegisterProps = {};
 
 export type RootStackParamList = {
-  Login: LoginProps|undefined;
-  Register:RegisterProps|undefined;
-  Home: HomeProps|undefined;
-  FormReport: FormReportProps|undefined;
-  StepsReport: StepsReportProps|undefined;
-  Report: ReportProps|undefined;
-  Detail: DetailProps|undefined;
+  Login: LoginProps | undefined;
+  Register: RegisterProps | undefined;
+  Home: HomeProps | undefined;
+  FormReport: FormReportProps | undefined;
+  StepsReport: StepsReportProps | undefined;
+  Report: ReportProps | undefined;
+  Detail: DetailProps | undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -36,9 +36,9 @@ const Stack = createStackNavigator<RootStackParamList>();
 const StackHome = () => {
   return (
     <NavigationContainer >
-      <Stack.Navigator 
-       initialRouteName="Login"
-        screenOptions={{ headerShown: false}}>
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}
         <Stack.Screen name="FormReport" component={FormReport} />
