@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, StatusBar, Alert, ToastAndroid } from 'react-native';
-import React, { useState, useCallback, useContext} from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import { Header } from '../../component/Header';
 import { CAMERA, Colors, PICTURE, fontFamily } from '../../../assets';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -11,12 +11,16 @@ import { Button } from '../../component/Button';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigate/StackHome';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LecturesContext } from '../utilities/LecturesContext';
 import axios from 'axios';
 type PropsType = NativeStackScreenProps<RootStackParamList, 'FormReport'>;
 
+
+type Category = {
+   key: string;
+   value: string;
+};
 //data list
-const data = [
+const data: Category[] = [
    { key: '1', value: 'Cơ sở vật chất' },
    { key: '2', value: 'Thiết bị mạng' },
    { key: '3', value: 'Vệ sinh phòng học' },
@@ -24,34 +28,41 @@ const data = [
    { key: '5', value: 'Sự cố khác' },
 ];
 const FormReport: React.FC<PropsType> = (props) => {
-   const { navigation } = props;
+   const { navigation, route } = props;
+   const name = route.params?.name;
    //dropdown pick
-   const [selected, setSelected] = useState('');
-   const [room, setRoom] = useState('');
-   const [description, setDescription] = useState('');
-   const {addNew_reports} = useContext(LecturesContext);
+   const [selected, setSelected] = useState<string>('');
+   const [room, setRoom] = useState<string>('');
+   const [description, setDescription] = useState<string>('');
+   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
    //status button
    const [status, setstatus] = useState(true);
+
    const handleButton = () => {
       setstatus(status);
       navigation.navigate('StepsReport');
    };
 
+   const handleSelectCategory = (value: string) => {
+      const category = data.find((item) => item.key === value);
+      setSelectedCategory(category || null);
+      setSelected(value);
+   };
    const handleAddReports = async () => {
       try {
-          const response = await axios.post("http://192.168.1.10:3000/report/add_report", {
-              room: room,
-              description: description,
-              selected: selected
-          });
-          console.log(response);
-          ToastAndroid.show('Add report Success', ToastAndroid.SHORT);
+         const response = await axios.post("http://192.168.1.9:3000/report/add_report", {
+            room: room,
+            description: description,
+            category: selectedCategory?.value || '',
+            name: name
+         });
+         console.log(response);
+         ToastAndroid.show('Add report Success', ToastAndroid.SHORT);
       } catch (error) {
-          console.error(error);
-          ToastAndroid.show('Add report Failed', ToastAndroid.SHORT);
+         console.error(error);
+         ToastAndroid.show('Add report Failed', ToastAndroid.SHORT);
       }
-  };
-
+   };
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="dark-content"
@@ -61,11 +72,13 @@ const FormReport: React.FC<PropsType> = (props) => {
          <View style={styles.inputContainer}>
             <TextInput
                style={styles.inputContent}
-               placeholder='Nhập số phòng' />
+               placeholder='Nhập số phòng'
+               value={room}
+               onChangeText={setRoom} />
          </View>
          <View style={styles.selectionItems}>
             <SelectList
-               setSelected={setSelected}
+               setSelected={handleSelectCategory}
                data={data}
                search={false}
                boxStyles={{ borderRadius: 12, backgroundColor: Colors.WHITE, borderColor: Colors.GRAY_PALE, height: 48 }} //override default styles
@@ -77,7 +90,10 @@ const FormReport: React.FC<PropsType> = (props) => {
                style={styles.inputContent}
                placeholder='Mô tả sự cố'
                multiline={true}
-               numberOfLines={10} />
+               textAlignVertical="top"
+               numberOfLines={10}
+               value={description}
+               onChangeText={setDescription} />
          </View>
          <View style={styles.optionImages}>
             <View style={styles.imagesCamera}>
@@ -89,7 +105,7 @@ const FormReport: React.FC<PropsType> = (props) => {
                   source={PICTURE} />
             </View>
          </View>
-         <Button status={status} title='Gửi yêu cầu' onPress={()=>{handleAddReports()}} viewStyle={{ width: '100%', marginTop: 16 }}></Button>
+         <Button status={status} title='Gửi yêu cầu' onPress={() => { handleAddReports() }} viewStyle={{ width: '100%', marginTop: 16 }}></Button>
       </SafeAreaView>
    );
 };

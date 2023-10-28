@@ -15,7 +15,9 @@ type LoginProps = {};
 type HomeProps = {
   role: number
 };
-type FormReportProps = {};
+type FormReportProps = {
+ name: string
+};
 type StepsReportProps = {};
 type ReportProps = {};
 type DetailProps = {};
@@ -41,7 +43,7 @@ const StackHome = () => {
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}
-        <Stack.Screen name="FormReport" component={FormReport} />
+        <Stack.Screen name="FormReport" component={FormReport}  />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="StepsReport" component={StepsReport} />
         <Stack.Screen name="Report" component={Report} />

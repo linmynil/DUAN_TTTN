@@ -51,6 +51,8 @@ const Login: React.FC<PropsType> = props => {
     const [selectedId, setSelectedId] = useState<string>();
     const [modalVisible, setModalVisible] = useState(false);
     const [email, setEmail] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
+    const [avatar, setAvatar] = useState<string>('');
     const handleOnchangeEmail = (value: string) => {
         setEmail(value);
         console.log(value);
@@ -79,7 +81,7 @@ const Login: React.FC<PropsType> = props => {
     //     setToggleStaff(!toggleStaff);
     //     setToggle(false);
     // };
-    
+
 
     const [data, setData] = React.useState<Item[]>(
         [{
@@ -112,9 +114,17 @@ const Login: React.FC<PropsType> = props => {
                 email: email,
                 password: password,
             });
-            console.log('=>>>>>>',response.data.user.role);          
+            const id_user = response.data.user.id_user; // Lấy giá trị id_user từ response.data
+            console.log('id_user:', id_user);
+            console.log('=>>>>>>', response.data.user.role);
             ToastAndroid.show('Login Success', ToastAndroid.SHORT);
-            navigation.navigate('Home',{role:response.data.user.role});
+            navigation.navigate('Home', { role: response.data.user.role});
+            // Lấy thông tin avatar và username từ response.data và lưu vào state
+            const avatar = response.data.user.avatar;
+            const username = response.data.user.username;
+            setAvatar(avatar);
+            setUsername(username);
+
         } catch (error) {
             console.error(error);
             ToastAndroid.show('Login Failed', ToastAndroid.SHORT);
@@ -300,7 +310,7 @@ const styles = StyleSheet.create({
 
     },
     button: {
-        marginTop:35,
+        marginTop: 35,
         flexDirection: 'row',
         width: Dimensions.get('window').width * 0.86,
         borderRadius: 12,

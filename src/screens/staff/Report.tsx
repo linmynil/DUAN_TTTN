@@ -11,10 +11,15 @@ import { RootStackParamList } from '../../navigate/StackHome';
 import { LecturesContext } from '../utilities/LecturesContext';
 import axios from 'axios';
 
+
 type Item = {
   id: string;
-  avatar: ImageSourcePropType;
-  nameUser: string;
+  // avatar: ImageSourcePropType;
+  // nameUser: string;
+  id_user: {
+    id: string;
+    name: string;
+  }
   room: string;
   time: string;
   description: string;
@@ -30,13 +35,15 @@ const Item = ({ item, onPress }: ItemProps) => {
   // const timedetail = time.substring(11, 19);
   return (
     <TouchableOpacity onPress={onPress} style={styles.item}>
-      <Text style={styles.title}>{item.description}</Text>
+      <Text style={styles.title} >{item.description}</Text>
       <View style={styles.row}>
-        <Image style={styles.avatar} source={item.avatar}  ></Image>
+        <Image style={styles.avatar} source={{ uri: 'https://inkythuatso.com/uploads/images/2021/12/logo-fpt-polytechnic-inkythuatso-09-12-57-46.jpg' }}  ></Image>
         <View>
-          <Text style={[styles.title, { fontSize: 13 }]}>{item.nameUser}</Text>
+          {item.id_user && item.id_user.name && (
+            <Text style={[styles.title, { fontSize: 14, fontFamily: fontFamily.Regular }]}>Người yêu cầu:  {item.id_user.name}</Text>
+          )}
           <View style={styles.row}>
-            <Text style={styles.itemText}>Phòng: {item.room}</Text>
+            <Text style={styles.itemText}>  Phòng: {item.room}</Text>
             <Text style={styles.itemText}>{item.time}</Text>
           </View>
         </View>
@@ -49,49 +56,7 @@ type PropsType = NativeStackScreenProps<RootStackParamList, 'Report'>;
 const Report: React.FC<PropsType> = props => {
   const { navigation } = props;
   const [selectTab, setSelectTab] = useState(0);
-  const [dataReports, setDataReports] = React.useState<Item[]>(
-    // [{
-    //   id: '1',
-    //   title: 'Sự cố máy chiếu hỏng',
-    //   avatar: IMAGE_LOGIN,
-    //   name: 'Lê Minh Hiếu',
-    //   room: 'T1103',
-    //   time: '2023-10-18T12:34:56'
-    // },
-    // {
-    //   id: '2',
-    //   title: 'Sự cố máy chiếu hỏng',
-    //   avatar: IMAGE_LOGIN,
-    //   name: 'Lê Minh Hiếu',
-    //   room: 'T1103',
-    //   time: '2023-10-18T12:34:56'
-    // },
-    // {
-    //   id: '3',
-    //   title: 'Sự cố máy chiếu hỏng',
-    //   avatar: IMAGE_LOGIN,
-    //   name: 'Lê Minh Hiếu',
-    //   room: 'T1103',
-    //   time: '2023-10-21T00:59:29.042Z'
-    // },
-    // {
-    //   id: '4',
-    //   title: 'Sự cố máy chiếu hỏng',
-    //   avatar: IMAGE_LOGIN,
-    //   name: 'Lê Minh Hiếu',
-    //   room: 'T1103',
-    //   time: '2023-10-18T12:34:56'
-    // },
-    // {
-    //   id: '5',
-    //   title: 'Sự cố máy chiếu hỏng',
-    //   avatar: IMAGE_LOGIN,
-    //   name: 'Lê Minh Hiếu',
-    //   room: 'T1103',
-    //   time: '2023-10-20T16:55:31.317+00:00'
-    // },
-    // ]
-  );
+  const [dataReports, setDataReports] = React.useState<Item[]>();
   const handleSelect = (item: Item) => {
     navigation.navigate('Detail');
     console.log(item.id);
@@ -190,15 +155,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.GRAY_PALE2,
   },
   avatar: {
-    height: 35,
-    width: 35,
+    height: 50,
+    width: 50,
     borderRadius: 100,
-    marginRight: 13
+    borderWidth: 1,
+    borderColor: Colors.GRAY_PALE,
+    marginRight: 13,
   },
   item: {
     flexDirection: 'column',
     marginHorizontal: 4,
-    height: 100,
+    height: 120,
     borderRadius: 8,
     backgroundColor: Colors.WHITE,
     marginBottom: 21,
@@ -209,7 +176,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4, // Bán kính của bóng,
     paddingTop: 14,
     paddingHorizontal: 16,
-    paddingBottom: 18,
+    paddingBottom: 24,
     justifyContent: 'space-between'
   },
   title: {
@@ -217,16 +184,18 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Medium,
     color: Colors.BLACK,
     lineHeight: 25,
-    marginLeft: 5
+    marginLeft: 5,
   },
   row: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   itemText: {
+    marginTop: 8,
     fontSize: 12,
     fontFamily: fontFamily.Medium,
     color: Colors.GRAY_TEXT,
-    marginRight: 10
+    marginRight: 10,
+    paddingBottom: -16
   }
 
 
