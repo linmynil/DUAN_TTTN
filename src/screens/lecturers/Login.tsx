@@ -110,11 +110,11 @@ const Login: React.FC<PropsType> = props => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post("http://192.168.1.9:3000/user/login", {
+            const response = await axios.post("http://192.168.1.11:3000/user/login", {
                 email: email,
                 password: password,
             });
-            const id_user = response.data.user.id_user; // Lấy giá trị id_user từ response.data
+            const id_user = response.data.user._id; // Lấy giá trị id_user từ response.data
             console.log('id_user:', id_user);
             console.log('=>>>>>>', response.data.user.role);
             ToastAndroid.show('Login Success', ToastAndroid.SHORT);
