@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, StatusBar, Alert, ToastAndroid, Pressable, ImageSourcePropType, Dimensions } from 'react-native';
@@ -157,7 +159,7 @@ const FormReport: React.FC<PropsType> = (props) => {
          console.log(formData);
 
          const fetchData = async () => {
-            const url = `http://192.168.1.11:3000/report/uploadimages`;
+            const url = `http://192.168.1.17:3000/report/uploadimages`;
             const res = await fetch(url, {
                method: 'POST',
                headers: {
