@@ -38,7 +38,8 @@ type ItemData = {
 
 const FormReport: React.FC<PropsType> = (props) => {
    const { navigation, route } = props;
-   const name = route.params?.name;
+   const id_user = route.params?.id as string;
+   const name_user = route.params?.name as string;
    //dropdown pick
    const [selected, setSelected] = useState<string>('');
    const [room, setRoom] = useState<string>('');
@@ -214,15 +215,17 @@ const FormReport: React.FC<PropsType> = (props) => {
       
           const uploadedImageLinks = await Promise.all(imageUploadPromises)
           console.log(uploadedImageLinks)
-         const response = await axios.post("http:192.168.1.11:3000/report/add_report", {
+          const response = await axios.post("http:192.168.1.11:3000/report/add_report", {
             room: room,
+            name_user:name_user,
             description: description,
             category: selectedCategory?.value || '',
-            name: name,
-            image:  selectedCategory?.value,
+            id_user:id_user,
+            image:  uploadedImageLinks as string[],
            
          });
          ToastAndroid.show('Add report Success', ToastAndroid.SHORT);
+         navigation.navigate('StepsReport', {id:id_user})
       } catch (error) {
          console.error(error);
          ToastAndroid.show('Add report Failed', ToastAndroid.SHORT);

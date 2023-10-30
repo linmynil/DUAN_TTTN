@@ -118,7 +118,7 @@ const Login: React.FC<PropsType> = props => {
             console.log('id_user:', id_user);
             console.log('=>>>>>>', response.data.user.role);
             ToastAndroid.show('Login Success', ToastAndroid.SHORT);
-            navigation.navigate('Home', { role: response.data.user.role});
+            navigation.navigate('Home', { role: response.data.user.role, id:response.data.user._id , name:response.data.user.name});
             // Lấy thông tin avatar và username từ response.data và lưu vào state
             const avatar = response.data.user.avatar;
             const username = response.data.user.username;

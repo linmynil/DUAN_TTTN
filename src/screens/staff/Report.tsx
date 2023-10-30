@@ -15,7 +15,7 @@ import axios from 'axios';
 type Item = {
   id: string;
   // avatar: ImageSourcePropType;
-  // nameUser: string;
+
   id_user: {
     id: string;
     name: string;
@@ -23,6 +23,7 @@ type Item = {
   room: string;
   time: string;
   description: string;
+  name_user: string;
 };
 
 type ItemProps = {
@@ -30,21 +31,27 @@ type ItemProps = {
   onPress: () => void;
 };
 const Item = ({ item, onPress }: ItemProps) => {
-  const time = item.time;
-  // const date = time.substring(0, 10);
-  // const timedetail = time.substring(11, 19);
+  const time = item.time as string;
+  const dateTime = new Date(time);
+
+  // Lấy giờ và ngày từ đối tượng Date
+  const hours = dateTime.getHours();
+  const minutes = dateTime.getMinutes();
+  const seconds = dateTime.getSeconds();
+  const year = dateTime.getFullYear();
+  const month = dateTime.getMonth() + 1; // Tháng trong JavaScript đếm từ 0, nên cần cộng thêm 1
+  const day = dateTime.getDate();
   return (
     <TouchableOpacity onPress={onPress} style={styles.item}>
       <Text style={styles.title} >{item.description}</Text>
       <View style={styles.row}>
         <Image style={styles.avatar} source={{ uri: 'https://inkythuatso.com/uploads/images/2021/12/logo-fpt-polytechnic-inkythuatso-09-12-57-46.jpg' }}  ></Image>
         <View>
-          {item.id_user && item.id_user.name && (
-            <Text style={[styles.title, { fontSize: 14, fontFamily: fontFamily.Regular }]}>Người yêu cầu:  {item.id_user.name}</Text>
-          )}
+            <Text style={[styles.title, { fontSize: 14, fontFamily: fontFamily.Medium}]}> {item.name_user}</Text>
           <View style={styles.row}>
             <Text style={styles.itemText}>  Phòng: {item.room}</Text>
-            <Text style={styles.itemText}>{item.time}</Text>
+            <Text style={styles.itemText}>{hours +':'+ minutes+':'+seconds}</Text>
+            <Text style={styles.itemText}>{day +':'+ month+':'+year}</Text>
           </View>
         </View>
       </View>
@@ -54,7 +61,10 @@ const Item = ({ item, onPress }: ItemProps) => {
 };
 type PropsType = NativeStackScreenProps<RootStackParamList, 'Report'>;
 const Report: React.FC<PropsType> = props => {
-  const { navigation } = props;
+  const { navigation, route } = props;
+  const id_user = route.params?.id;
+  const name_user = route.params?.name as string;
+  console.log(id_user)
   const [selectTab, setSelectTab] = useState(0);
   const [dataReports, setDataReports] = React.useState<Item[]>();
   const handleSelect = (item: Item) => {
@@ -63,7 +73,7 @@ const Report: React.FC<PropsType> = props => {
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.9:3000/report/getALL_reportsApp");
+      const response = await axios.get("http://192.168.1.11:3000/report/getALL_reportsApp");
       const reportData = response.data;
       console.log("==========================", reportData);
       setDataReports(reportData);

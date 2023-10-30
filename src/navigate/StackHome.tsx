@@ -14,12 +14,18 @@ import Register from '../screens/lecturers/Register';
 type LoginProps = {};
 type HomeProps = {
   role: number
+  id: string
+  name:string
 };
 type FormReportProps = {
- name: string
+  id: string,
+  name:string
 };
 type StepsReportProps = {};
-type ReportProps = {};
+type ReportProps = {
+  id: string,
+  name:string
+};
 type DetailProps = {};
 type RegisterProps = {};
 
@@ -43,7 +49,7 @@ const StackHome = () => {
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}
-        <Stack.Screen name="FormReport" component={FormReport}  />
+        <Stack.Screen name="FormReport" component={FormReport} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="StepsReport" component={StepsReport} />
         <Stack.Screen name="Report" component={Report} />

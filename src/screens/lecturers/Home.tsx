@@ -21,6 +21,10 @@ type PropsType = NativeStackScreenProps<RootStackParamList, 'Home'>;
 const Home: React.FC<PropsType> = (props) => {
     const { route,navigation } = props;
     const role = route.params?.role;
+    let id_user = route.params?.id as string;
+    let name_user = route.params?.name as string;
+
+    console.log(id_user)
     const [text, setText] = useState('');
     const [text1, setText1] = useState('');
     const [text2, setText2] = useState('');
@@ -36,10 +40,11 @@ const Home: React.FC<PropsType> = (props) => {
     
     const handleButton = () => {
         if (role == 0) {
-            navigation.navigate('FormReport')
+            navigation.navigate('FormReport', {id:id_user, name:name_user})
+            
         }
         else if (role == 1) {
-            navigation.navigate('Report')
+            navigation.navigate('Report',{id:id_user, name:name_user})
         }
     }
     // Tham số thứ hai là một mảng rỗng để đảm bảo useEffect chỉ được gọi một lần khi component được tạo
