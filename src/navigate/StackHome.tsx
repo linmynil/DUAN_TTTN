@@ -39,7 +39,7 @@ const StackHome = () => {
   return (
     <NavigationContainer >
       <Stack.Navigator
-        initialRouteName="FormReport"
+        initialRouteName="Login"
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}

@@ -5,7 +5,6 @@ import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, StatusBar, 
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { Header } from '../../component/Header';
 import { CAMERA, Colors, PICTURE, fontFamily } from '../../../assets';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Button } from '../../component/Button';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -102,7 +101,7 @@ const FormReport: React.FC<PropsType> = (props) => {
          );
 
          const fetchData = async () => {
-            const url = `http://192.168.1.11:3000/report/uploadimages`;
+            const url = `http://192.168.1.17:3000/report/uploadimages`;
             const res = await fetch(url, {
                method: 'POST',
                headers: {

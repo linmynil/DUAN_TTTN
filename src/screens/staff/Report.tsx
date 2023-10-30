@@ -63,7 +63,7 @@ const Report: React.FC<PropsType> = props => {
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.9:3000/report/getALL_reportsApp");
+      const response = await axios.get("http://192.168.1.17:3000/report/getALL_reportsApp");
       const reportData = response.data;
       console.log("==========================", reportData);
       setDataReports(reportData);
