@@ -192,14 +192,34 @@ const FormReport: React.FC<PropsType> = (props) => {
      
       try {
          console.log('=>>>',dataImage.map((item: ItemData) => item.image));
-         console.log('=>>>',selectedCategory?.value || '');
+         console.log('=>>>',selectedCategory?.value);
          console.log('=>>>', images);
+
+         const imageUploadPromises = dataImage.map(async (item: ItemData) => {
+            const formData = new FormData();
+            formData.append('image', {
+              uri: item.image,
+              type: 'image/jpeg', // Thay thế bằng kiểu ảnh tương ứng
+              name: 'image.jpg', // Thay thế bằng tên tệp tin ảnh tương ứng
+            });
+      
+            const response = await axios.post('http://192.168.1.11:3000/report/uploadimages', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+      
+            return response.data.link;
+          });
+      
+          const uploadedImageLinks = await Promise.all(imageUploadPromises)
+          console.log(uploadedImageLinks)
          const response = await axios.post("http:192.168.1.11:3000/report/add_report", {
             room: room,
             description: description,
             category: selectedCategory?.value || '',
             name: name,
-            image: images,
+            image:  selectedCategory?.value,
            
          });
          ToastAndroid.show('Add report Success', ToastAndroid.SHORT);
