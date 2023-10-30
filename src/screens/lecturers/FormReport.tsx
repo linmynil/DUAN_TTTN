@@ -53,8 +53,8 @@ const FormReport: React.FC<PropsType> = (props) => {
          image: sourceImage,
       };
       setDataImage([...dataImage, newItem]);
-       console.log('=>>>',dataImage.length)
-       
+      console.log('=>>>', dataImage.length)
+
    };
 
    const handleButton = () => {
@@ -177,8 +177,6 @@ const FormReport: React.FC<PropsType> = (props) => {
       }
    }, []);
 
-
-
    const renderItem = ({ item }: { item: ItemData }) => (
       <View style={styles.item} >
          <Image source={{ uri: item.image }} style={styles.image} />
@@ -188,10 +186,10 @@ const FormReport: React.FC<PropsType> = (props) => {
 
 
    const handleAddReports = async () => {
-     
+
       try {
-         console.log('=>>>',dataImage.map((item: ItemData) => item.image));
-         console.log('=>>>',selectedCategory?.value || '');
+         console.log('=>>>', dataImage.map((item: ItemData) => item.image));
+         console.log('=>>>', selectedCategory?.value || '');
          console.log('=>>>', images);
          const response = await axios.post("http:192.168.1.11:3000/report/add_report", {
             room: room,
@@ -199,7 +197,7 @@ const FormReport: React.FC<PropsType> = (props) => {
             category: selectedCategory?.value || '',
             name: name,
             image: images,
-           
+
          });
          ToastAndroid.show('Add report Success', ToastAndroid.SHORT);
       } catch (error) {
