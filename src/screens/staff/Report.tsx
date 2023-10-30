@@ -91,7 +91,7 @@ const Report: React.FC<PropsType> = props => {
         backgroundColor={'transparent'}
         translucent />
       <Header title='Sự cố ' onPress={() => navigation.goBack()}></Header>
-      <View style={styles.switchButton}>
+      <ScrollView style={styles.switchButton}>
         <View style={styles.bordertab}>
           <TouchableOpacity onPress={() => setSelectTab(0)} style={[styles.button, { backgroundColor: selectTab == 0 ? Colors.YELLOW : Colors.WHITE }]}>
             <Text style={[styles.text, { color: selectTab == 0 ? Colors.WHITE : Colors.GRAY_TEXT }]}>Sự cố hiện có</Text>
@@ -102,23 +102,23 @@ const Report: React.FC<PropsType> = props => {
         </View>
         {selectTab == 0 ? (
           <ScrollView showsHorizontalScrollIndicator={false}>
-            <View style={styles.tab}>
+            <ScrollView style={styles.tab}>
               {dataReports?.map((item: Item) => (
                 <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
               ))}
-            </View>
+            </ScrollView>
           </ScrollView>
 
         ) : (
           <ScrollView showsHorizontalScrollIndicator={false}>
-            <View style={styles.tab}>
+            <ScrollView style={styles.tab}>
               {dataReports?.map((item: Item) => (
                 <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
               ))}
-            </View>
+            </ScrollView>
           </ScrollView>
         )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   tab: {
     width: '100%',
-    height: '90%',
+    // height: '90%',
     marginTop: 35,
     backgroundColor: Colors.GRAY_PALE2,
   },
