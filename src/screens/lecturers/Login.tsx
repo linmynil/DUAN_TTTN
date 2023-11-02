@@ -14,7 +14,6 @@ import {
     Dimensions,
     Image,
     Modal,
-    Pressable,
     SafeAreaView,
     ScrollView,
     StatusBar,
@@ -24,13 +23,12 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import { ARROW_DOWN, Colors, EMAIL, IMAGE_LOGIN, LOGO, PASSWORD, SUBTRACT, TOGGLE, TOGGLE_CLICK, USER, fontFamily } from '../../../assets';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigate/StackHome';
+import { ARROW_DOWN, Colors, EMAIL, IMAGE_LOGIN, LOGO, PASSWORD, SUBTRACT,fontFamily } from '../../../assets';
 import { TextField } from '../../component/TextField';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { Button } from '../../component/Button';
 import axios from 'axios';
+import { AppContext } from '../../context/AppCotext';
 
 type Item = {
     id: string;
@@ -42,31 +40,34 @@ type ItemProps = {
     onPress: () => void;
 };
 
-type PropsType = NativeStackScreenProps<RootStackParamList, 'Login'>;
-const Login: React.FC<PropsType> = props => {
-    const { navigation } = props;
+// type PropsType = NativeStackScreenProps<RootStackParamList, 'Login'>;
+const Login: React.FC = () => {
+    const appContext = useContext(AppContext);
+
+    if (!appContext) {
+      // Xử lý khi không có giá trị trong AppContext
+      return null;
+    }
+  
+    const { isLogin, setisLogin } = appContext;
+    const { infoUser, setinfoUser } = appContext;
     // const [toggle, setToggle] = useState(false);
     const [text, setText] = useState('Chọn cơ sở đào tạo');
     // const [toggleStaff, setToggleStaff] = useState(false);
     const [selectedId, setSelectedId] = useState<string>();
     const [modalVisible, setModalVisible] = useState(false);
     const [email, setEmail] = useState<string>('');
-    const [username, setUsername] = useState<string>('');
-    const [avatar, setAvatar] = useState<string>('');
     const handleOnchangeEmail = (value: string) => {
         setEmail(value);
-        console.log(value);
     };
     const [password, setPassword] = useState<string>('');
     const handleOnchangePassword = (value: string) => {
         setPassword(value);
-        console.log(value);
     };
 
     const [hidePassword, setHidePassword] = useState(true);
     const managePasswordVisibility = () => {
         setHidePassword(!hidePassword);
-        console.log(hidePassword);
     };
 
     const [checkboxState, setCheckboxState] = useState(false);
@@ -110,21 +111,16 @@ const Login: React.FC<PropsType> = props => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post("http://192.168.1.11:3000/user/login", {
+            const response = await axios.post("http://192.168.1.19:3000/user/login", {
                 email: email,
                 password: password,
             });
-            const id_user = response.data.user._id; // Lấy giá trị id_user từ response.data
-            console.log('id_user:', id_user);
-            console.log('=>>>>>>', response.data.user.role);
             ToastAndroid.show('Login Success', ToastAndroid.SHORT);
-            navigation.navigate('Home', { role: response.data.user.role, id:response.data.user._id , name:response.data.user.name});
-            // Lấy thông tin avatar và username từ response.data và lưu vào state
-            const avatar = response.data.user.avatar;
-            const username = response.data.user.username;
-            setAvatar(avatar);
-            setUsername(username);
-
+          // navigation.navigate('Home', { role: response.data.user.role, id:response.data.user._id , name:response.data.user.name});       
+            setisLogin(true);
+            setinfoUser(response.data.user)
+            console.log('====>',response.data.user);
+          
         } catch (error) {
             console.error(error);
             ToastAndroid.show('Login Failed', ToastAndroid.SHORT);
@@ -231,9 +227,6 @@ const Login: React.FC<PropsType> = props => {
                         />
                         <Text style={[styles.text2, { color: Colors.GRAY_TEXT, }]}>Remember password</Text>
                     </View>
-                    <Pressable onPress={() => { navigation.navigate("Register"); }}>
-                        <Text style={[styles.text2, { color: Colors.BLUE, }]}>Forget password</Text>
-                    </Pressable>
                 </View>
                 <Button status={true} title='Đăng nhập' onPress={() => {
                     handleLogin(); console.log(">>>>");

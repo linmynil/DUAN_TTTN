@@ -1,72 +1,44 @@
 /* eslint-disable prettier/prettier */
 import { Image, StatusBar, StyleSheet, Text, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { Header } from '../../component/Header';
 import { Colors, STATUS, STATUS_DONE, fontFamily } from '../../../assets';
 import { Button } from '../../component/Button';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigate/StackHome';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppContext } from '../../context/AppCotext';
+import { HistoryStackParamList } from '../../navigate/HistoryStack';
 
-type PropsType = NativeStackScreenProps<RootStackParamList, 'StepsReport'>;
-const StepsReport: React.FC<PropsType> = props => {
-   const { navigation } = props;
-   const appContext = useContext(AppContext);
-
-   if (!appContext) {
-      // Xử lý khi không có giá trị trong AppContext
-      return null;
-   }
-
-   const { infoUser, setinfoUser } = appContext;
-   const { infoReport, setinfoReport } = appContext;
-   console.log(infoReport)
-
-   const time = infoReport.time as string;
-   const dateTime = new Date(time);
-   // Lấy giờ và ngày từ đối tượng Date
-   const hours = dateTime.getHours();
-   const minutes = dateTime.getMinutes();
-   const seconds = dateTime.getSeconds();
-   const year = dateTime.getFullYear();
-   const month = dateTime.getMonth() + 1; // Tháng trong JavaScript đếm từ 0, nên cần cộng thêm 1
-   const day = dateTime.getDate();
-   useEffect(() => {
-      const timeout = setTimeout(() => {
-         navigation.navigate('HomeInner');
-      }, 15000);
-
-      return () => clearTimeout(timeout);
-   }, []);
+type PropsType = NativeStackScreenProps<HistoryStackParamList, 'DetailHistory'>;
+const DetailHistory: React.FC<PropsType> = props => {
+    const { navigation } = props;
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar
-            barStyle="dark-content"
-            backgroundColor={'transparent'}
-            translucent />
+          barStyle="dark-content"
+                backgroundColor={'transparent'}
+                translucent />
          <Header
             title='Yêu cầu hỗ trợ'
-            onPress={() => navigation.goBack()} />
+            onPress={()=>navigation.goBack()} />
 
          <View style={styles.itemCard}>
             <Image
                source={STATUS_DONE}
                style={styles.imgAvatar} />
             <View style={styles.itemContent}>
-               <Text style={styles.txtTitle}>{infoReport.description}</Text>
+               <Text style={styles.txtTitle}>Sự cố máy chiếu hỏng</Text>
                <View style={styles.nameContent}>
-                  <Text style={styles.txtTitleItem}>Người yêu cầu: </Text>
-                  <Text style={styles.txtNameStaff}> {infoReport.name_user} </Text>
+                  <Text style={styles.txtTitleItem}>Người tiếp nhận: </Text>
+                  <Text style={styles.txtNameStaff}>Nguyễn Văn A </Text>
                </View>
-               {/* <View style={styles.nameContent}>
-                  <Text style={styles.txtTitleItem}>SĐT:</Text>
-                  <Text style={styles.txtNameStaff}>{infoReport.description} </Text>
-               </View> */}
                <View style={styles.nameContent}>
-                  <Text style={styles.txtDate}>{day +'/'+ month+'/'+year}</Text>
-                  <Text style={styles.txtTime}>{hours +':'+ minutes}</Text>
-                  <Text style={styles.txtTime}>Phòng: {infoReport.room}</Text>
+                  <Text style={styles.txtTitleItem}>SĐT:</Text>
+                  <Text style={styles.txtNameStaff}>0971761090 </Text>
+               </View>
+               <View style={styles.nameContent}>
+                  <Text style={styles.txtDate}>09/10/2023</Text>
+                  <Text style={styles.txtTime}>09:35am</Text>
+                  <Text style={styles.txtTime}>T1001</Text>
                </View>
             </View>
          </View>
@@ -75,7 +47,7 @@ const StepsReport: React.FC<PropsType> = props => {
             <Image style={styles.imgStatus} source={STATUS_DONE} />
             <View style={styles.itemContentStatus}>
                <Text style={styles.txtTitleStatus}>Yêu cầu</Text>
-               <Text style={styles.txtTimeStatus}> {hours +':'+ minutes}</Text>
+               <Text style={styles.txtTimeStatus}> 09:32 am</Text>
             </View>
          </View>
          <View style={styles.line} />
@@ -94,12 +66,12 @@ const StepsReport: React.FC<PropsType> = props => {
                <Text style={styles.txtTimeStatus}> 09:32 am</Text>
             </View>
          </View>
-         <Button title='Phản hồi' viewStyle={{ width: '100%', marginTop: 24 }}></Button>
+         <Button title='Phản hồi' viewStyle={{width:'100%', marginTop: 24}}></Button>
       </SafeAreaView>
    );
 };
 
-export default StepsReport;
+export default DetailHistory;
 
 const styles = StyleSheet.create({
    line: {
@@ -185,17 +157,17 @@ const styles = StyleSheet.create({
       borderWidth: 2,
       borderColor: Colors.WHITE,
       borderRadius: 100,
+      marginVertical: 28,
    },
    itemCard: {
       width: '100%',
-      height: 90,
+      height: 120,
       borderWidth: 1,
       borderColor: Colors.GRAY_PALE,
       borderRadius: 12,
       backgroundColor: Colors.YELLOW_PALE,
       paddingHorizontal: 12,
       flexDirection: 'row',
-      alignItems:'center',
       marginTop: 16,
    },
    container: {

@@ -8,7 +8,6 @@ import { Header } from '../../component/Header';
 import { Colors, IMAGE_LOGIN, fontFamily } from '../../../assets'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigate/StackHome';
-import { LecturesContext } from '../utilities/LecturesContext';
 import axios from 'axios';
 
 
@@ -33,7 +32,7 @@ type ItemProps = {
 const Item = ({ item, onPress }: ItemProps) => {
   const time = item.time as string;
   const dateTime = new Date(time);
-
+console.log(item.id)
   // Lấy giờ và ngày từ đối tượng Date
   const hours = dateTime.getHours();
   const minutes = dateTime.getMinutes();
@@ -42,7 +41,7 @@ const Item = ({ item, onPress }: ItemProps) => {
   const month = dateTime.getMonth() + 1; // Tháng trong JavaScript đếm từ 0, nên cần cộng thêm 1
   const day = dateTime.getDate();
   return (
-    <TouchableOpacity onPress={onPress} style={styles.item}>
+    <TouchableOpacity onPress={onPress}  style={styles.item }>
       <Text style={styles.title} >{item.description}</Text>
       <View style={styles.row}>
         <Image style={styles.avatar} source={{ uri: 'https://inkythuatso.com/uploads/images/2021/12/logo-fpt-polytechnic-inkythuatso-09-12-57-46.jpg' }}  ></Image>
@@ -73,7 +72,7 @@ const Report: React.FC<PropsType> = props => {
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.11:3000/report/getALL_reportsApp");
+      const response = await axios.get("http://192.168.1.10:3000/report/getALL_reportsApp");
       const reportData = response.data;
       console.log("==========================", reportData);
       setDataReports(reportData);

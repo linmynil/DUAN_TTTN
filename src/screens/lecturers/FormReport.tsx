@@ -14,8 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { launchImageLibrary, launchCamera, Asset } from 'react-native-image-picker';
 import { FlatList } from 'react-native-gesture-handler';
+import { AppContext } from '../../context/AppCotext';
 type PropsType = NativeStackScreenProps<RootStackParamList, 'FormReport'>;
-
 
 type Category = {
    key: string;
@@ -37,9 +37,19 @@ type ItemData = {
 
 
 const FormReport: React.FC<PropsType> = (props) => {
-   const { navigation, route } = props;
-   const id_user = route.params?.id as string;
-   const name_user = route.params?.name as string;
+   const appContext = useContext(AppContext);
+
+   if (!appContext) {
+     // Xử lý khi không có giá trị trong AppContext
+     return null;
+   }
+ 
+   const { infoUser, setinfoUser } = appContext;
+   const { infoReport, setinfoReport } = appContext;
+   const {navigation } = props;
+   const id_user = infoUser._id as string;
+   const name_user = infoUser.name as string;
+   console.log(infoUser );
    //dropdown pick
    const [selected, setSelected] = useState<string>('');
    const [room, setRoom] = useState<string>('');
@@ -47,17 +57,7 @@ const FormReport: React.FC<PropsType> = (props) => {
    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
    //status button
    const [status, setstatus] = useState(true);
-   const [dataImage, setDataImage] = useState<ItemData[]>([]);
-   const [images, setImages] = useState<string>('');
-   const addData = (sourceImage: string) => {
-      const newItem: ItemData = {
-         id: Math.random().toString(),
-         image: sourceImage,
-      };
-      setDataImage([...dataImage, newItem]);
-       console.log('=>>>',dataImage.length)
-       
-   };
+   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
    const handleButton = () => {
       setstatus(status);
@@ -71,167 +71,141 @@ const FormReport: React.FC<PropsType> = (props) => {
    };
 
    const handleCameraPhoto = useCallback(async () => {
-      const options: any = {
-         saveToPhotos: true,
-         mediaType: 'photo',
-         includeBase64: false,
-         includeExtra: true,
-      };
-
-      const response: any = await new Promise((resolve) => {
-         launchCamera(options, (res) => {
-            resolve(res);
-            // console.log(res);
-         });
-      });
-
-      if (response.didCancel) {
-         console.log('Cancel pick image');
-      } else if (response.error) {
-         console.log('image picker error: ', response.error);
-      } else if (response.customButton) {
-         console.log('tap button: ', response.customButton);
-      } else {
-         const selectedImage: Asset = response.assets[0];
-         const formData = new FormData();
-
-         formData.append('image', {
-            uri: selectedImage.uri,
-            type: selectedImage.type,
-            name: selectedImage.fileName,
-         }
-         );
-
-         const fetchData = async () => {
-            const url = `http://192.168.1.11:3000/report/uploadimages`;
-            const res = await fetch(url, {
-               method: 'POST',
-               headers: {
-                  // Authorization: `Bearer ${token}`,
-                  'Content-Type': 'multipart/form-data',
-               },
-               body: formData,
-            });
-            const data = await res.json();
-            return data;
+      try {
+         const options: any = {
+            saveToPhotos: true,
+            mediaType: 'photo',
+            includeBase64: false,
+            includeExtra: true,
          };
-
-         const res = await fetchData();
-         // console.log(res);
-         // console.log(res.link);
-         addData(res.link)
-         setImages(res.link)
+   
+         const response: any = await new Promise((resolve) => {
+            launchCamera(options, (res) => {
+               resolve(res);
+               // console.log(res);
+            });
+         });
+   
+         if (response.didCancel) {
+            console.log('Cancel pick image');
+         } else if (response.error) {
+            console.log('image picker error: ', response.error);
+         } else if (response.customButton) {
+            console.log('tap button: ', response.customButton);
+         } else {
+            const selectedImage: Asset = response.assets[0];
+            const formData = new FormData();
+   
+            formData.append('image', {
+               uri: selectedImage.uri,
+               type: selectedImage.type,
+               name: selectedImage.fileName,
+            }
+            );
+   
+            const fetchData = async () => {
+               const url = `http://192.168.1.19:3000/report/uploadimages`;
+               const res = await fetch(url, {
+                  method: 'POST',
+                  headers: {
+                     // Authorization: `Bearer ${token}`,
+                     'Content-Type': 'multipart/form-data',
+                  },
+                  body: formData,
+               });
+               const data = await res.json();
+               return data;
+            };
+   
+            const res = await fetchData();
+            console.log(res);
+            const uploadedImageUrl = res.link;
+            setImageUrls(prevImageUrls => [...prevImageUrls, uploadedImageUrl]);
+            console.log('===>',imageUrls);
+         }
+      } catch (error) {
+         console.log('Error:', error);
       }
+
    }, []);
-   console.log(dataImage.length);
    const handleChoosePhoto = useCallback(async () => {
-      const options: any = {
-         saveToPhotos: true,
-         mediaType: 'photo',
-         includeBase64: false,
-         includeExtra: true,
-      };
-
-      const response: any = await new Promise((resolve) => {
-         launchImageLibrary(options, (res) => {
-            resolve(res);
-            // console.log(res);
-         });
-      });
-
-      if (response.didCancel) {
-         console.log('Cancel pick image');
-      } else if (response.error) {
-         console.log('image picker error: ', response.error);
-      } else if (response.customButton) {
-         console.log('tap button: ', response.customButton);
-      } else {
-         const selectedImage: Asset = response.assets[0];
-         const formData = new FormData();
-
-         formData.append('image', {
-
-            uri: selectedImage.uri,
-            type: selectedImage.type,
-            name: selectedImage.fileName,
-         }
-         );
-         console.log(formData);
-
-         const fetchData = async () => {
-            const url = `http://192.168.1.11:3000/report/uploadimages`;
-            const res = await fetch(url, {
-               method: 'POST',
-               headers: {
-                  // Authorization: `Bearer ${token}`,
-                  'Content-Type': 'multipart/form-data',
-               },
-               body: formData,
-            });
-            const data = await res.json();
-            return data;
+      try {
+         const options: any = {
+            saveToPhotos: true,
+            mediaType: 'photo',
+            includeBase64: false,
+            includeExtra: true,
          };
-
-         const res = await fetchData();
-         console.log(res);
-         console.log(res.link);
-         addData(res.link)
+   
+         const response: any = await new Promise((resolve) => {
+            launchImageLibrary(options, (res) => {
+               resolve(res);
+               // console.log(res);
+            });
+         });
+   
+         if (response.didCancel) {
+            console.log('Cancel pick image');
+         } else if (response.error) {
+            console.log('image picker error: ', response.error);
+         } else if (response.customButton) {
+            console.log('tap button: ', response.customButton);
+         } else {
+            const selectedImage: Asset = response.assets[0];
+            const formData = new FormData();
+   
+            formData.append('image', {
+               uri: selectedImage.uri,
+               type: selectedImage.type,
+               name: selectedImage.fileName,
+            }
+            );
+   
+            const fetchData = async () => {
+               const url = `http://192.168.1.19:3000/report/uploadimages`;
+               const res = await fetch(url, {
+                  method: 'POST',
+                  headers: {
+                     // Authorization: `Bearer ${token}`,
+                     'Content-Type': 'multipart/form-data',
+                  },
+                  body: formData,
+               });
+               const data = await res.json();
+               return data;
+            };
+   
+            const res = await fetchData();
+            console.log(res);
+            const uploadedImageUrl = res.link;
+            setImageUrls(prevImageUrls => [...prevImageUrls, uploadedImageUrl]);
+         }
+      } catch (error) {
+         console.log('Error:', error);
       }
    }, []);
-
-
-
-   const renderItem = ({ item }: { item: ItemData }) => (
-      <View style={styles.item} >
-         <Image source={{ uri: item.image }} style={styles.image} />
-      </View>
-
-   );
-
 
    const handleAddReports = async () => {
-     
+      console.log('===>',imageUrls);
       try {
-         console.log('=>>>',dataImage.map((item: ItemData) => item.image));
-         console.log('=>>>',selectedCategory?.value);
-         console.log('=>>>', images);
-
-         const imageUploadPromises = dataImage.map(async (item: ItemData) => {
-            const formData = new FormData();
-            formData.append('image', {
-              uri: item.image,
-              type: 'image/jpeg', // Thay thế bằng kiểu ảnh tương ứng
-              name: 'image.jpg', // Thay thế bằng tên tệp tin ảnh tương ứng
-            });
-      
-            const response = await axios.post('http://192.168.1.11:3000/report/uploadimages', formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            });
-      
-            return response.data.link;
-          });
-      
-          const uploadedImageLinks = await Promise.all(imageUploadPromises)
-          console.log(uploadedImageLinks)
-          const response = await axios.post("http:192.168.1.11:3000/report/add_report", {
+         const response = await axios.post("http:192.168.1.19:3000/report/add_report", {
             room: room,
-            name_user:name_user,
+            name_user: name_user,
             description: description,
             category: selectedCategory?.value || '',
-            id_user:id_user,
-            image:  uploadedImageLinks as string[],
-           
+            id_user: id_user,
+            img_report: imageUrls,
          });
          ToastAndroid.show('Add report Success', ToastAndroid.SHORT);
-         navigation.navigate('StepsReport', {id:id_user})
+         console.log(response.data)
+         setinfoReport(response.data.model)
+         navigation.navigate('StepsReport')
       } catch (error) {
          console.error(error);
          ToastAndroid.show('Add report Failed', ToastAndroid.SHORT);
       }
    };
-   return dataImage.length == 0 ? (
+   return imageUrls.length == 0 ? (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="dark-content"
             backgroundColor={'transparent'}
@@ -326,14 +300,11 @@ const FormReport: React.FC<PropsType> = (props) => {
                </Pressable>
             </View>
          </View>
-         <FlatList
-            style={{ height: 100, width: Dimensions.get('window').width * 1 }}
-            horizontal
-            // numColumns={3}
-            data={dataImage}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-         />
+         <View style={styles.row}>
+            {imageUrls.map((imageUrl, index) => (
+               <Image key={index} source={{ uri: imageUrl }} style={{ width: 100, height: 100 }} />
+            ))}
+         </View>
          <Button status={status} title='Gửi yêu cầu' onPress={() => { handleAddReports() }} viewStyle={{ width: '100%' }}></Button>
       </SafeAreaView>
    )
@@ -408,5 +379,8 @@ const styles = StyleSheet.create({
    image: {
       width: Dimensions.get('window').width * 0.27,
       height: 100,
+   },
+   row:{
+      flexDirection:'row'
    }
 });
