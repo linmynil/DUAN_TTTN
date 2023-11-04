@@ -12,7 +12,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import { BELL, CALL, CALL_CLICK, CHANGE, Colors,  ELLIPSE, GRADUTION, HOME_CLICK,  LOGOUT, NOTIFICATION, TOGGLE_NOTIFICATION, fontFamily } from '../../../assets';
+import { BELL, CALL, CALL_CLICK, CHANGE, Colors, ELLIPSE, GRADUTION, HOME_CLICK, LOGOUT, NOTIFICATION, TOGGLE_NOTIFICATION, fontFamily } from '../../../assets';
 import { AppContext } from '../../context/AppCotext';
 
 
@@ -22,11 +22,18 @@ const Setting: React.FC = () => {
     const appContext = useContext(AppContext);
 
     if (!appContext) {
-      // Xử lý khi không có giá trị trong AppContext
-      return null;
+        // Xử lý khi không có giá trị trong AppContext
+        return null;
     }
-  
+
     const { isLogin, setisLogin } = appContext;
+    const { infoUser, setinfoUser } = appContext;
+    const name_user = infoUser.name as string;
+    const email =infoUser.email as string;
+    const phoneNumber =infoUser.phoneNumber  as string;
+
+    console.log(infoUser);
+    //dropdown pick
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="dark-content"
@@ -36,8 +43,8 @@ const Setting: React.FC = () => {
                 <View style={styles.row}>
                     <Image style={styles.avatar} source={ELLIPSE}></Image>
                     <View>
-                        <Text style={styles.text1} >Lê Minh Hiếu</Text>
-                        <Text style={styles.text2} >04862664758</Text>
+                        <Text style={styles.text1} >{name_user}</Text>
+                        <Text style={styles.text2} >{email}</Text>
                     </View>
                 </View>
                 <TouchableOpacity onPress={() => { }} >
@@ -48,7 +55,7 @@ const Setting: React.FC = () => {
                 <Text style={styles.text1} >Thông tin</Text>
                 <View style={styles.row} >
                     <Image style={[styles.icon, { width: 24, height: 24, marginRight: 30 }]} source={CALL}></Image>
-                    <Text style={styles.text2} >04862664758</Text>
+                    <Text style={styles.text2} >{phoneNumber}</Text>
                 </View>
                 <View style={styles.row} >
                     <Image style={[styles.icon, { width: 24, height: 24, marginRight: 30 }]} source={HOME_CLICK}></Image>
@@ -57,12 +64,12 @@ const Setting: React.FC = () => {
             </View>
             <View style={[styles.card, { height: 108, paddingBottom: 30 }]}>
                 <Text style={styles.text1} >Thông báo</Text>
-                <View style={[styles.row,{justifyContent:'space-between'}]} >
-                <View style={styles.row} >
-                    <Image style={[styles.icon, { width: 20, height: 24, marginRight: 30 }]} source={BELL}></Image>
-                    <Text style={styles.text2} >Thông báo</Text>
-                </View>
-                <Image style={[styles.icon, { width: 55, height: 23 }]} source={TOGGLE_NOTIFICATION}></Image>
+                <View style={[styles.row, { justifyContent: 'space-between' }]} >
+                    <View style={styles.row} >
+                        <Image style={[styles.icon, { width: 20, height: 24, marginRight: 30 }]} source={BELL}></Image>
+                        <Text style={styles.text2} >Thông báo</Text>
+                    </View>
+                    <Image style={[styles.icon, { width: 55, height: 23 }]} source={TOGGLE_NOTIFICATION}></Image>
                 </View>
 
             </View>
@@ -73,7 +80,7 @@ const Setting: React.FC = () => {
                     <Text style={styles.text2} >Chuyển sang tài khoản khác</Text>
                 </View>
                 <View style={styles.row} >
-                    <Pressable onPress={()=>setisLogin(false)}>
+                    <Pressable onPress={() => setisLogin(false)}>
                         <Image style={[styles.icon, { width: 24, height: 24, marginRight: 30 }]} source={LOGOUT}></Image>
                     </Pressable>
                     <Text style={styles.text2} >Đăng xuất</Text>

@@ -42,6 +42,7 @@ const Home: React.FC<PropsType> = (props) => {
         setText1(newValue1);
         const newValue2 = role == 1 ? 'Quản lí mượn phòng học, hội trường' : 'Tính sẵn sàng phòng học';
         setText2(newValue2);
+        
     }, [role]);
     
     const handleButton = () => {

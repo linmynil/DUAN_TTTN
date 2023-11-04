@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import StackHome from '../navigate/StackHome';
 import HistoryStack from '../navigate/HistoryStack';
 import ContactStack from '../navigate/ContactStack';
@@ -25,8 +25,20 @@ const Users = () => {
 };
 
 const Main = () => {
+    const appContext = useContext(AppContext);
+
+    if (!appContext) {
+        // Xử lý khi không có giá trị trong AppContext
+        return null;
+    }
+
+    const { isLogin, infoUser } = appContext;
+    const role = infoUser.role as number;
+    // Lấy giá trị role từ infoUser
+
     return (
         <Tab.Navigator
+            initialRouteName="Trang chủ"
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused }) => {
                     let iconSource;
@@ -43,45 +55,47 @@ const Main = () => {
 
                     return (
                         <Image
-                          source={iconSource}
-                          style={[
-                            styles.tabIcon,
-                            focused && styles.tabIconFocused,
-                          ]}
-                          resizeMode="contain"
+                            source={iconSource}
+                            style={[
+                                styles.tabIcon,
+                                focused && styles.tabIconFocused,
+                            ]}
+                            resizeMode="contain"
                         />
-                      );
+                    );
                 },
-                tabBarActiveTintColor: Colors.YELLOW ,
+                tabBarActiveTintColor: Colors.YELLOW,
                 tabBarInactiveTintColor: Colors.GRAY_BOTTOM,
                 tabBarLabelStyle: {
-                    marginBottom:10,
-                  fontSize: 12,
-                  fontFamily:fontFamily.Bold,
+                    marginBottom: 10,
+                    fontSize: 12,
+                    fontFamily: fontFamily.Bold,
                 },
                 tabBarStyle: {
-                    height: 70, 
-                    paddingVertical:15// Chỉnh chiều cao ở đây
-                  },
+                    height: 70,
+                    paddingVertical: 15// Chỉnh chiều cao ở đây
+                },
                 headerShown: false,
             })}
         >
             <Tab.Screen name="Trang chủ" component={StackHome} />
             <Tab.Screen name="Lịch sử" component={HistoryStack} />
-            <Tab.Screen name="Liên hệ" component={ContactStack} />
-            <Tab.Screen name="Cài đặt" component={Setting} />
+            {role  !==  1 && (
+                <Tab.Screen name="Liên hệ" component={ContactStack} />
+            )}
+            <Tab.Screen name="Cài đặt" component={Setting} options={{ unmountOnBlur: true }} />
         </Tab.Navigator>
     );
 };
 const styles = StyleSheet.create({
     tabIcon: {
-      width: 20,
-      height: 20,
+        width: 20,
+        height: 20,
     },
     tabIconFocused: {
-        transform: [ 
+        transform: [
             { translateY: -10 }, // Di chuyển lên trên 10 đơn vị
-          ],
+        ],
     }
 });
 
@@ -93,8 +107,8 @@ const AppNavigator = () => {
         return null;
     }
 
-    const { isLogin } = appContext;
-
+    const { isLogin, infoUser } = appContext;
+    const role = infoUser.role;
     return (
         <>
             {isLogin === false ? <Users /> : <Main />}

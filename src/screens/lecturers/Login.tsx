@@ -111,15 +111,15 @@ const Login: React.FC = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post("http://192.168.1.19:3000/user/login", {
+            const response = await axios.post("http://192.168.1.54:3000/user/login", {
                 email: email,
                 password: password,
             });
             ToastAndroid.show('Login Success', ToastAndroid.SHORT);
           // navigation.navigate('Home', { role: response.data.user.role, id:response.data.user._id , name:response.data.user.name});       
             setisLogin(true);
-            setinfoUser(response.data.user)
-            console.log('====>',response.data.user);
+            setinfoUser(response.data.user);
+         
           
         } catch (error) {
             console.error(error);
@@ -141,14 +141,14 @@ const Login: React.FC = () => {
             <StatusBar barStyle="dark-content"
                 backgroundColor={'transparent'}
                 translucent />
-            <Image
+            {/* <Image
                 source={SUBTRACT}
                 style={styles.backgroundImage}
             />
             <Image
                 source={IMAGE_LOGIN}
                 style={styles.imageLogin}
-            />
+            /> */}
             <View style={styles.content}>
                 <Image
                     source={LOGO}
@@ -214,7 +214,7 @@ const Login: React.FC = () => {
                     hidePassword={hidePassword}
                     onPressRight={managePasswordVisibility}
                     viewStyle={{ alignSelf: 'center', width: Dimensions.get('window').width * 0.86 }} ></TextField>
-                <View style={[styles.row, { justifyContent: 'space-between', width: Dimensions.get('window').width * 0.86, marginTop: 39 }]}>
+                <View style={[styles.row, { justifyContent: 'space-between', width: Dimensions.get('window').width * 0.86, marginTop: 20 }]}>
                     <View style={styles.checkbox}>
                         <BouncyCheckbox
                             size={24}
@@ -230,7 +230,11 @@ const Login: React.FC = () => {
                 </View>
                 <Button status={true} title='Đăng nhập' onPress={() => {
                     handleLogin(); console.log(">>>>");
-                }} viewStyle={{ width: Dimensions.get('window').width * 0.86, position: 'absolute', bottom: -70, zIndex: 0 }}></Button>
+                }} viewStyle={{ width: Dimensions.get('window').width * 0.86,marginTop:30 , marginBottom:30}}></Button>
+                 <Image
+                source={IMAGE_LOGIN}
+                style={styles.imageLogin}
+            />
             </View>
         </SafeAreaView>
     );
@@ -254,16 +258,14 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width * 0.75,
         height: 160,
         resizeMode: 'stretch',
-        position: 'absolute',
-        bottom: 60,
-        right: Dimensions.get('window').width * 0.07,
-        zIndex: -1,
+        marginRight:-25
 
     },
     logo: {
         width: Dimensions.get('window').width * 0.5,
         height: 82,
         resizeMode: 'stretch',
+        marginTop:30
     },
     content: {
         width: Dimensions.get('window').width * 1,

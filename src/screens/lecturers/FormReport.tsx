@@ -49,7 +49,10 @@ const FormReport: React.FC<PropsType> = (props) => {
    const {navigation } = props;
    const id_user = infoUser._id as string;
    const name_user = infoUser.name as string;
-   console.log(infoUser );
+   const avatar = infoUser.avatar as string;
+   const phone = infoUser.phoneNumber as string;
+
+   console.log(infoUser,phone,id_user,avatar,name_user );
    //dropdown pick
    const [selected, setSelected] = useState<string>('');
    const [room, setRoom] = useState<string>('');
@@ -104,7 +107,7 @@ const FormReport: React.FC<PropsType> = (props) => {
             );
    
             const fetchData = async () => {
-               const url = `http://192.168.1.19:3000/report/uploadimages`;
+               const url = `http://192.168.1.54:3000/report/uploadimages`;
                const res = await fetch(url, {
                   method: 'POST',
                   headers: {
@@ -162,7 +165,7 @@ const FormReport: React.FC<PropsType> = (props) => {
             );
    
             const fetchData = async () => {
-               const url = `http://192.168.1.19:3000/report/uploadimages`;
+               const url = `http://192.168.1.54:3000/report/uploadimages`;
                const res = await fetch(url, {
                   method: 'POST',
                   headers: {
@@ -188,13 +191,16 @@ const FormReport: React.FC<PropsType> = (props) => {
    const handleAddReports = async () => {
       console.log('===>',imageUrls);
       try {
-         const response = await axios.post("http:192.168.1.19:3000/report/add_report", {
+         const response = await axios.post("http:192.168.1.54:3000/report/add_report", {
             room: room,
+            avatar:avatar,
             name_user: name_user,
+            phone:phone,
             description: description,
             category: selectedCategory?.value || '',
             id_user: id_user,
             img_report: imageUrls,
+           
          });
          ToastAndroid.show('Add report Success', ToastAndroid.SHORT);
          console.log(response.data)
@@ -302,7 +308,7 @@ const FormReport: React.FC<PropsType> = (props) => {
          </View>
          <View style={styles.row}>
             {imageUrls.map((imageUrl, index) => (
-               <Image key={index} source={{ uri: imageUrl }} style={{ width: 100, height: 100 }} />
+               <Image key={index} source={{ uri: imageUrl }} style={{ width: 100, height: 100,margin:10 } } />
             ))}
          </View>
          <Button status={status} title='Gửi yêu cầu' onPress={() => { handleAddReports() }} viewStyle={{ width: '100%' }}></Button>

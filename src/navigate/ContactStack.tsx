@@ -11,7 +11,8 @@ type ContactProps = {};
 type DetailContactProps = {
    email:string,
    name:string,
-   phone:string
+   phone:string,
+   avatar:string
 };
 
 

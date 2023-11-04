@@ -12,17 +12,33 @@ import axios from 'axios';
 
 
 type Item = {
-  id: string;
+  _id: string;
   // avatar: ImageSourcePropType;
-
   id_user: {
     id: string;
     name: string;
   }
   room: string;
+  avatar: string;
+  category: string[];
+  phone: string;
   time: string;
   description: string;
   name_user: string;
+  step_two: {
+    time: string,
+    status: boolean
+  },
+  step_three: {
+    time: string,
+    status: boolean
+  },
+  review: {
+    content: string,
+    star: string,
+    time: string,
+  },
+  
 };
 
 type ItemProps = {
@@ -32,7 +48,6 @@ type ItemProps = {
 const Item = ({ item, onPress }: ItemProps) => {
   const time = item.time as string;
   const dateTime = new Date(time);
-console.log(item.id)
   // Lấy giờ và ngày từ đối tượng Date
   const hours = dateTime.getHours();
   const minutes = dateTime.getMinutes();
@@ -41,16 +56,16 @@ console.log(item.id)
   const month = dateTime.getMonth() + 1; // Tháng trong JavaScript đếm từ 0, nên cần cộng thêm 1
   const day = dateTime.getDate();
   return (
-    <TouchableOpacity onPress={onPress}  style={styles.item }>
+    <TouchableOpacity onPress={onPress} style={styles.item}>
       <Text style={styles.title} >{item.description}</Text>
       <View style={styles.row}>
-        <Image style={styles.avatar} source={{ uri: 'https://inkythuatso.com/uploads/images/2021/12/logo-fpt-polytechnic-inkythuatso-09-12-57-46.jpg' }}  ></Image>
+        <Image style={styles.avatar} source={{ uri: item.avatar }}  ></Image>
         <View>
-            <Text style={[styles.title, { fontSize: 14, fontFamily: fontFamily.Medium}]}> {item.name_user}</Text>
+          <Text style={[styles.title, { fontSize: 14, fontFamily: fontFamily.Medium }]}> {item.name_user}</Text>
           <View style={styles.row}>
             <Text style={styles.itemText}>  Phòng: {item.room}</Text>
-            <Text style={styles.itemText}>{hours +':'+ minutes+':'+seconds}</Text>
-            <Text style={styles.itemText}>{day +':'+ month+':'+year}</Text>
+            <Text style={styles.itemText}>Giờ: {hours + ':' + minutes  }</Text>
+            <Text style={styles.itemText}>Ngày: {day + ':' + month + ':' + year}</Text>
           </View>
         </View>
       </View>
@@ -60,30 +75,68 @@ console.log(item.id)
 };
 type PropsType = NativeStackScreenProps<RootStackParamList, 'Report'>;
 const Report: React.FC<PropsType> = props => {
-  const { navigation, route } = props;
-  const id_user = route.params?.id;
-  const name_user = route.params?.name as string;
-  console.log(id_user)
+  const { navigation } = props;
   const [selectTab, setSelectTab] = useState(0);
   const [dataReports, setDataReports] = React.useState<Item[]>();
+  const [waitReports, setwaitReports] = React.useState<Item[] | undefined>();
   const handleSelect = (item: Item) => {
-    navigation.navigate('Detail');
-    console.log(item.id);
+    const name = item.name_user as string;
+    const phone = item.phone as string;
+    const avatar = item.avatar as string
+    const time= item.time as string
+    const room = item.room as string
+    const id = item._id as string
+    const description = item.description as string
+    const step_two_status= item.step_two.status ;
+    const step_three_status = item.step_three.status
+    const category = item.category[0] as string
+    navigation.navigate('Detail',{phone,name,avatar,time,room,description,id,step_three_status,step_two_status, category});
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.10:3000/report/getALL_reportsApp");
+      const response = await axios.get("http://192.168.1.54:3000/report/getAllStepone");
       const reportData = response.data;
-      console.log("==========================", reportData);
-      setDataReports(reportData);
-      // console.log("============DATANENENENE==============",data);
+      setDataReports(reportData.reverse());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchWaitData = async () => {
+    try {
+      const response = await axios.get("http://192.168.1.54:3000/report/getAllSteptwo");
+      const waitReports = response.data;
+      setwaitReports(waitReports.reverse())
     } catch (error) {
       console.error(error);
     }
   };
   useEffect(() => {
     fetchData();
-  }, []);
+    fetchWaitData();
+    const interval = setInterval(() => {
+      fetchData();
+      fetchWaitData();
+    }, 500); // Tải lại dữ liệu sau mỗi 1 phút (60000 milliseconds)
+
+    return () => {
+      clearInterval(interval); // Hủy cơ chế tải lại định kỳ khi component bị unmount
+    };
+  },[]);
+
+  const renderReports = (reports: Item[] | undefined) => {
+    if (!reports || !Array.isArray(reports)) {
+      return null; // Xử lý trường hợp reports là undefined
+    }
+    return (
+      <ScrollView showsHorizontalScrollIndicator={false}>
+        <ScrollView style={styles.tab}>
+          {reports?.map((item: Item, index: number) => (
+            <Item item={item} key={index} onPress={() => handleSelect(item)} />
+          ))}
+        </ScrollView>
+      </ScrollView>
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content"
@@ -99,24 +152,9 @@ const Report: React.FC<PropsType> = props => {
             <Text style={[styles.text, { color: selectTab == 1 ? Colors.WHITE : Colors.GRAY_TEXT }]}>Đang tiếp nhận</Text>
           </TouchableOpacity>
         </View>
-        {selectTab == 0 ? (
-          <ScrollView showsHorizontalScrollIndicator={false}>
-            <ScrollView style={styles.tab}>
-              {dataReports?.map((item: Item) => (
-                <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
-              ))}
-            </ScrollView>
-          </ScrollView>
-
-        ) : (
-          <ScrollView showsHorizontalScrollIndicator={false}>
-            <ScrollView style={styles.tab}>
-              {dataReports?.map((item: Item) => (
-                <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
-              ))}
-            </ScrollView>
-          </ScrollView>
-        )}
+        <View>
+          {selectTab === 0 ? renderReports(dataReports) : renderReports(waitReports)}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

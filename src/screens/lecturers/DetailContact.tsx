@@ -25,6 +25,8 @@ const DetailContact: React.FC<PropsType> = (props) => {
     const email = route.params?.email;
     const phone= route.params?.phone;
     const name = route.params?.name;
+    const  avatar = route.params?.avatar;
+
     // let id_user = route.params?.id as string;
     // let name_user = route.params?.name as string;
 
@@ -62,7 +64,7 @@ const DetailContact: React.FC<PropsType> = (props) => {
                 onPress={() => navigation.goBack()} />
             <View style={[styles.row, { justifyContent: 'space-between', marginTop:30 }]}>
                 <View style={styles.row}>
-                    <Image style={styles.avatar} source={ELLIPSE}></Image>
+                    <Image style={styles.avatar} source={{uri:avatar}}></Image>
                     <View>
                         <Text style={styles.text1} >{name}</Text>
                         <Text style={styles.text2} >{email}</Text>

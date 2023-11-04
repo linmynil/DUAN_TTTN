@@ -24,10 +24,23 @@ const StepsReport: React.FC<PropsType> = props => {
    console.log(infoReport)
 
    const time = infoReport.time as string;
+   const timetwo = infoReport.step_two.time as string;
+   const timethree = infoReport.step_three.time as string;
+
+
+   
    const dateTime = new Date(time);
+   const dateTimetwo = new Date(timetwo);
+   const dateTimethree = new Date(timethree);
+
+
    // Lấy giờ và ngày từ đối tượng Date
    const hours = dateTime.getHours();
    const minutes = dateTime.getMinutes();
+   const hourstwo = dateTimetwo.getHours();
+   const minutestwo = dateTimetwo.getMinutes();
+   const hoursthree = dateTimethree.getHours();
+   const minutesthree = dateTimethree.getMinutes();
    const seconds = dateTime.getSeconds();
    const year = dateTime.getFullYear();
    const month = dateTime.getMonth() + 1; // Tháng trong JavaScript đếm từ 0, nên cần cộng thêm 1
@@ -51,7 +64,7 @@ const StepsReport: React.FC<PropsType> = props => {
 
          <View style={styles.itemCard}>
             <Image
-               source={STATUS_DONE}
+               source={{uri:infoReport.avatar}}
                style={styles.imgAvatar} />
             <View style={styles.itemContent}>
                <Text style={styles.txtTitle}>{infoReport.description}</Text>
@@ -64,10 +77,10 @@ const StepsReport: React.FC<PropsType> = props => {
                   <Text style={styles.txtNameStaff}>{infoReport.description} </Text>
                </View> */}
                <View style={styles.nameContent}>
-                  <Text style={styles.txtDate}>{day +'/'+ month+'/'+year}</Text>
-                  <Text style={styles.txtTime}>{hours +':'+ minutes}</Text>
-                  <Text style={styles.txtTime}>Phòng: {infoReport.room}</Text>
+                  <Text style={styles.txtDate}>Ngày: {day +'/'+ month+'/'+year}</Text>
+                  <Text style={styles.txtTime}>Giờ: {hours +':'+ minutes}</Text>                
                </View>
+               <Text style={[styles.txtTime,{marginLeft:0}]}>Phòng: {infoReport.room}</Text>
             </View>
          </View>
          <Text style={styles.txtStatus}>Trạng thái yêu cầu</Text>
@@ -80,18 +93,18 @@ const StepsReport: React.FC<PropsType> = props => {
          </View>
          <View style={styles.line} />
          <View style={styles.itemStatus}>
-            <Image style={styles.imgStatus} source={STATUS} />
+            <Image style={styles.imgStatus} source={infoReport.step_two.status? STATUS_DONE:STATUS} />
             <View style={styles.itemContentStatus}>
                <Text style={styles.txtTitleStatus}>Yêu cầu đã được tiếp nhận</Text>
-               <Text style={styles.txtTimeStatus}> 09:32 am</Text>
+               <Text style={styles.txtTimeStatus}> Giờ: {infoReport.step_two.status ? hourstwo+':'+ minutestwo:'----'}</Text>
             </View>
          </View>
          <View style={styles.line} />
          <View style={styles.itemStatus}>
-            <Image style={styles.imgStatus} source={STATUS} />
+            <Image style={styles.imgStatus} source={infoReport.step_three.status? STATUS_DONE:STATUS} />
             <View style={styles.itemContentStatus}>
                <Text style={styles.txtTitleStatus}>Yêu cầu hoàn thành</Text>
-               <Text style={styles.txtTimeStatus}> 09:32 am</Text>
+               <Text style={styles.txtTimeStatus}> Giờ: {infoReport.step_three.status ? hoursthree+':'+ minutesthree:'----'}</Text>
             </View>
          </View>
          <Button title='Phản hồi' viewStyle={{ width: '100%', marginTop: 24 }}></Button>
@@ -188,7 +201,7 @@ const styles = StyleSheet.create({
    },
    itemCard: {
       width: '100%',
-      height: 90,
+      height: 120,
       borderWidth: 1,
       borderColor: Colors.GRAY_PALE,
       borderRadius: 12,

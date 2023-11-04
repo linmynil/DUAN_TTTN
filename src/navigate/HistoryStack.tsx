@@ -8,7 +8,16 @@ import DetailHistory from '../screens/lecturers/DetailHistory';
 
 type HistoryProps = {};
 type DetailHistoryProps = {
-
+    description:string,
+    name_staff:string,
+    phone_staff:string,
+    avatar_staff:string,
+    step_two_time:string,
+    step_three_time:string,
+    step_two_status:boolean,
+    step_three_status:boolean,
+    room:string,
+    time:string
 };
 
 

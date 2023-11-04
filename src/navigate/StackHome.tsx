@@ -13,18 +13,29 @@ import Detail from '../screens/staff/Detail';
 type HomeProps = {
   role: number
   id: string
-  name:string
+  name: string
 };
 type FormReportProps = {
   id: string,
-  name:string
+  name: string
 };
 type StepsReportProps = {};
 type ReportProps = {
   id: string,
-  name:string
+  name: string
 };
-type DetailProps = {};
+type DetailProps = {
+  name: string,
+  phone: string,
+  avatar: string,
+  time: string,
+  room: string,
+  description: string,
+  id:string,
+  step_two_status:boolean,
+  step_three_status:boolean,
+  category: string;
+};
 type RegisterProps = {};
 
 export type RootStackParamList = {
@@ -39,17 +50,17 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const StackHome = () => {
   return (
-      <Stack.Navigator
-        initialRouteName="HomeInner"
-        screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}
-        <Stack.Screen name="FormReport" component={FormReport} />
-        <Stack.Screen name="HomeInner" component={Home} />
-        <Stack.Screen name="StepsReport" component={StepsReport} />
-        <Stack.Screen name="Report" component={Report} />
-        <Stack.Screen name="Detail" component={Detail} />
+    <Stack.Navigator
+      initialRouteName="HomeInner"
+      screenOptions={{ headerShown: false }}>
+      {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}
+      <Stack.Screen name="FormReport" component={FormReport} />
+      <Stack.Screen name="HomeInner" component={Home} />
+      <Stack.Screen name="StepsReport" component={StepsReport} />
+      <Stack.Screen name="Report" component={Report} />
+      <Stack.Screen name="Detail" component={Detail} />
 
-      </Stack.Navigator>
+    </Stack.Navigator>
   );
 };
 
