@@ -94,7 +94,7 @@ const Report: React.FC<PropsType> = props => {
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.54:3000/report/getAllStepone");
+      const response = await axios.get("http://192.168.1.8:3000/report/getAllStepone");
       const reportData = response.data;
       setDataReports(reportData.reverse());
     } catch (error) {
@@ -103,7 +103,7 @@ const Report: React.FC<PropsType> = props => {
   };
   const fetchWaitData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.54:3000/report/getAllSteptwo");
+      const response = await axios.get("http://192.168.1.8:3000/report/getAllSteptwo");
       const waitReports = response.data;
       setwaitReports(waitReports.reverse())
     } catch (error) {

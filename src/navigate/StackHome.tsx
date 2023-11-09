@@ -2,8 +2,6 @@
 /* eslint-disable no-trailing-spaces */
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import Login from '../screens/lecturers/Login';
 import Home from '../screens/lecturers/Home';
 import FormReport from '../screens/lecturers/FormReport';
 import StepsReport from '../screens/lecturers/StepsReport';

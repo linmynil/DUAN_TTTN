@@ -10,8 +10,10 @@ type HistoryProps = {};
 type DetailHistoryProps = {
     description:string,
     name_staff:string,
+    name_user:string,
     phone_staff:string,
     avatar_staff:string,
+    avatar:string,
     step_two_time:string,
     step_three_time:string,
     step_two_status:boolean,

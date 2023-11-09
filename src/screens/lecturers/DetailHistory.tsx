@@ -11,10 +11,12 @@ import { HistoryStackParamList } from '../../navigate/HistoryStack';
 type PropsType = NativeStackScreenProps<HistoryStackParamList, 'DetailHistory'>;
 const DetailHistory: React.FC<PropsType> = props => {
    const { navigation, route } = props;
-   const name = route.params?.name_staff;
+   const name_staff = route.params?.name_staff;
+   const name = route.params?.name_user;
    const time = route.params?.time as string;
    const phone = route.params?.phone_staff;
-   const avatar = route.params?.avatar_staff
+   const avatar_staff = route.params?.avatar_staff
+   const avatar = route.params?.avatar
    const step_two_time = route.params?.step_two_time as string;
    const step_three_time = route.params?.step_three_time as string;
    const step_two_status = route.params?.step_two_status 
@@ -52,15 +54,15 @@ const DetailHistory: React.FC<PropsType> = props => {
 
          <View style={styles.itemCard}>
             <Image
-               source={{uri:avatar}}
+               source={{uri:step_two_status?avatar_staff: avatar}}
                style={styles.imgAvatar} />
             <View style={styles.itemContent}>
                <Text style={styles.txtTitle}>{description}</Text>
-               <View style={styles.nameContent}>
+               <View style={[styles.nameContent, {display:step_two_status? 'flex':'none'}]}>
                   <Text style={styles.txtTitleItem}>Người tiếp nhận:</Text>
-                  <Text style={styles.txtNameStaff}>{name} </Text>
+                  <Text style={styles.txtNameStaff}>{name_staff} </Text>
                </View>
-               <View style={styles.nameContent}>
+               <View style={[styles.nameContent, {display:step_two_status? 'flex':'none'}]}>
                   <Text style={styles.txtTitleItem}>SĐT:</Text>
                   <Text style={styles.txtNameStaff}>{phone} </Text>
                </View>
@@ -198,6 +200,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 12,
       flexDirection: 'row',
       marginTop: 16,
+      alignItems:'center'
    },
    container: {
       paddingHorizontal: 24,

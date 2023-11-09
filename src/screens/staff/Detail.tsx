@@ -73,7 +73,7 @@ const Detail: React.FC<PropsType> = props => {
     const updateStepTwo = async () => {
         try {
             setProcessingStepTwo(true);
-            const response = await fetch(`http://192.168.1.54:3000/report/updateStepTwo/${_id}`, {
+            const response = await fetch(`http://192.168.1.8:3000/report/updateStepTwo/${_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ const Detail: React.FC<PropsType> = props => {
     const updateStepThree = async () => {
         try {
             setProcessingStepTwo(true);
-            const response = await fetch(`http://192.168.1.54:3000/report/updateStepThree/${_id}`, {
+            const response = await fetch(`http://192.168.1.8:3000/report/updateStepThree/${_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

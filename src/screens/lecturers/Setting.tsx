@@ -14,11 +14,12 @@ import {
 } from 'react-native';
 import { BELL, CALL, CALL_CLICK, CHANGE, Colors, ELLIPSE, GRADUTION, HOME_CLICK, LOGOUT, NOTIFICATION, TOGGLE_NOTIFICATION, fontFamily } from '../../../assets';
 import { AppContext } from '../../context/AppCotext';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { TabParamList } from '../../context/AppNavigator';
+type Props = BottomTabScreenProps<TabParamList, 'Setting'>;
 
-
-
-
-const Setting: React.FC = () => {
+const Setting: React.FC<Props> = (props ) => {
+     const {navigation} = props;
     const appContext = useContext(AppContext);
 
     if (!appContext) {
@@ -33,6 +34,11 @@ const Setting: React.FC = () => {
     const phoneNumber =infoUser.phoneNumber  as string;
 
     console.log(infoUser);
+
+    const handleLogout = () =>{
+        navigation.navigate('Home')
+        setisLogin(false);
+    }
     //dropdown pick
     return (
         <SafeAreaView style={styles.container}>
@@ -80,7 +86,7 @@ const Setting: React.FC = () => {
                     <Text style={styles.text2} >Chuyển sang tài khoản khác</Text>
                 </View>
                 <View style={styles.row} >
-                    <Pressable onPress={() => setisLogin(false)}>
+                    <Pressable onPress={handleLogout}>
                         <Image style={[styles.icon, { width: 24, height: 24, marginRight: 30 }]} source={LOGOUT}></Image>
                     </Pressable>
                     <Text style={styles.text2} >Đăng xuất</Text>

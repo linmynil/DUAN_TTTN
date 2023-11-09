@@ -12,9 +12,15 @@ import {
 } from 'react-native';
 import { Colors, HISTORY, HISTORY_CLICK, HOME, HOME_CLICK, PHONE, PHONE_CLICK, SETTING, SETTING_CLICK, fontFamily } from '../../assets';
 
+export type TabParamList = {
+    Home: undefined;
+    History: undefined;
+    Contact: undefined;
+    Setting: undefined;
+};
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<TabParamList>();
 
 const Users = () => {
     return (
@@ -36,20 +42,19 @@ const Main = () => {
     const role = infoUser.role as number;
     // Lấy giá trị role từ infoUser
 
+
     return (
         <Tab.Navigator
-            initialRouteName="Trang chủ"
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused }) => {
                     let iconSource;
-
-                    if (route.name === 'Trang chủ') {
+                    if (route.name === 'Home') {
                         iconSource = focused ? HOME_CLICK : HOME;
-                    } else if (route.name === 'Lịch sử') {
+                    } else if (route.name === 'History') {
                         iconSource = focused ? HISTORY_CLICK : HISTORY;
-                    } else if (route.name === 'Liên hệ') {
+                    } else if (route.name === 'Contact') {
                         iconSource = focused ? PHONE_CLICK : PHONE;
-                    } else if (route.name === 'Cài đặt') {
+                    } else if (route.name === 'Setting') {
                         iconSource = focused ? SETTING_CLICK : SETTING;
                     }
 
@@ -78,12 +83,12 @@ const Main = () => {
                 headerShown: false,
             })}
         >
-            <Tab.Screen name="Trang chủ" component={StackHome} />
-            <Tab.Screen name="Lịch sử" component={HistoryStack} />
-            {role  !==  1 && (
-                <Tab.Screen name="Liên hệ" component={ContactStack} />
+            <Tab.Screen name="Home" component={StackHome} />
+            <Tab.Screen name="History" component={HistoryStack} />
+            {role !== 1 && (
+                <Tab.Screen name="Contact" component={ContactStack} />
             )}
-            <Tab.Screen name="Cài đặt" component={Setting} options={{ unmountOnBlur: true }} />
+            <Tab.Screen name="Setting" component={Setting} />
         </Tab.Navigator>
     );
 };

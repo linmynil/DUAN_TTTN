@@ -107,7 +107,7 @@ const FormReport: React.FC<PropsType> = (props) => {
             );
    
             const fetchData = async () => {
-               const url = `http://192.168.1.54:3000/report/uploadimages`;
+               const url = `http://192.168.1.8:3000/report/uploadimages`;
                const res = await fetch(url, {
                   method: 'POST',
                   headers: {
@@ -165,7 +165,7 @@ const FormReport: React.FC<PropsType> = (props) => {
             );
    
             const fetchData = async () => {
-               const url = `http://192.168.1.54:3000/report/uploadimages`;
+               const url = `http://192.168.1.8:3000/report/uploadimages`;
                const res = await fetch(url, {
                   method: 'POST',
                   headers: {
@@ -191,7 +191,7 @@ const FormReport: React.FC<PropsType> = (props) => {
    const handleAddReports = async () => {
       console.log('===>',imageUrls);
       try {
-         const response = await axios.post("http:192.168.1.54:3000/report/add_report", {
+         const response = await axios.post("http:192.168.1.8:3000/report/add_report", {
             room: room,
             avatar:avatar,
             name_user: name_user,
