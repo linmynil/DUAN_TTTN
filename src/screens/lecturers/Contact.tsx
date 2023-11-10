@@ -72,7 +72,7 @@ const Contact: React.FC<PropsType> = (props) => {
     };
     const fetchData = async () => {
         try {
-            const response = await axios.get("http://192.168.1.8:3000/user/1/getAllStaff");
+            const response = await axios.get("http://192.168.1.3:3000/user/1/getAllStaff");
             const reportData = response.data;
             setDataReports(reportData);
             console.log("============DATANENENENE==============",  response.data);

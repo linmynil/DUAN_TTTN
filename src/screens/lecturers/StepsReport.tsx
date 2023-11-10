@@ -45,13 +45,13 @@ const StepsReport: React.FC<PropsType> = props => {
    const year = dateTime.getFullYear();
    const month = dateTime.getMonth() + 1; // Tháng trong JavaScript đếm từ 0, nên cần cộng thêm 1
    const day = dateTime.getDate();
-   useEffect(() => {
-      const timeout = setTimeout(() => {
-         navigation.navigate('HomeInner');
-      }, 15000);
+   // useEffect(() => {
+   //    const timeout = setTimeout(() => {
+   //       navigation.navigate('HomeInner');
+   //    }, 15000);
 
-      return () => clearTimeout(timeout);
-   }, []);
+   //    return () => clearTimeout(timeout);
+   // }, []);
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar

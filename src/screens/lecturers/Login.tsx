@@ -111,7 +111,7 @@ const Login: React.FC = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post("http://192.168.1.8:3000/user/login", {
+            const response = await axios.post("http://192.168.1.3:3000/user/login", {
                 email: email,
                 password: password,
             });

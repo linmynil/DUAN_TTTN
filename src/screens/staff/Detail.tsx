@@ -17,6 +17,16 @@ type ItemProps = {
     onPress: () => void;
 };
 
+type ItemDay = {
+    id: string;
+    title: string
+};
+
+type ItemDayProps = {
+    item: ItemDay;
+    onPress: () => void;
+};
+
 type PropsType = NativeStackScreenProps<RootStackParamList, 'Detail'>;
 const Detail: React.FC<PropsType> = props => {
     const appContext = useContext(AppContext);
@@ -32,6 +42,8 @@ const Detail: React.FC<PropsType> = props => {
     const phone_staff = infoUser.phoneNumber as string;
     const avatar_staff = infoUser.avatar as string
     console.log(avatar_staff, phone_staff, name_staff)
+    const [timedone, setTimeDone] = useState<string>('');
+    const [reason, setReason] = useState<string>('');
 
     const [note, setNote] = useState<string>('');
     const handleOnchangeNote = (value: string) => {
@@ -48,6 +60,9 @@ const Detail: React.FC<PropsType> = props => {
     const step_two_status = route.params?.step_two_status;
     const step_three_status = route.params?.step_three_status;
     const category = route.params?.category as string ;
+    const img_report = route.params?.img_report as string[] ;
+    console.log(img_report)
+
 
 
     const dateTime = new Date(time);
@@ -60,7 +75,14 @@ const Detail: React.FC<PropsType> = props => {
     const day = dateTime.getDate();
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleDay, setModalVisibleDay] = useState(false);
+
     const [selectedId, setSelectedId] = useState<string>();
+    const [selected, setSelected] = useState<string>();
+
+    const [text, settext] = useState<string>('Lỗi sự cố từ');
+    const [text2, settext2] = useState<string>('Thời gian');
+
     const [stepTwo, setstepTwo] = useState<boolean>();
     const [stepThree, setstepThree] = useState<boolean>();
     useEffect(() => {
@@ -73,7 +95,7 @@ const Detail: React.FC<PropsType> = props => {
     const updateStepTwo = async () => {
         try {
             setProcessingStepTwo(true);
-            const response = await fetch(`http://192.168.1.8:3000/report/updateStepTwo/${_id}`, {
+            const response = await fetch(`http://192.168.1.3:3000/report/updateStepTwo/${_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -102,16 +124,14 @@ const Detail: React.FC<PropsType> = props => {
     const updateStepThree = async () => {
         try {
             setProcessingStepTwo(true);
-            const response = await fetch(`http://192.168.1.8:3000/report/updateStepThree/${_id}`, {
+            const response = await fetch(`http://192.168.1.3:3000/report/updateStepThree/${_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ _id: _id, note:note}),
-
+                body: JSON.stringify({ _id: _id, note:note, reason:reason,timedone:timedone}),
             }
             );
-
             if (response.ok) {
                 const data = await response.json();
                 setstepThree(step_three_status)
@@ -126,39 +146,77 @@ const Detail: React.FC<PropsType> = props => {
         }
     };
 
-    const [data, setData] = React.useState<Item[]>(
+    const [dataDay, setDataDay] = React.useState<Item[]>(
         [{
             id: '1',
-            title: 'Cơ sở vật chất'
+            title: '1 ngày'
         },
         {
             id: '2',
-            title: 'Thiết bị học'
+            title: '3 ngày'
         },
         {
             id: '3',
-            title: 'Vệ sinh phòng học'
+            title: '5 ngày'
         },
         {
             id: '4',
-            title: 'Góp ý phòng học'
+            title: '7 ngày'
         },
         {
             id: '5',
-            title: 'Sự cố khác'
+            title: '30 ngày'
+
+        },
+        ]
+    );
+    const [data, setData] = React.useState<Item[]>(
+        [{
+            id: '1',
+            title: 'Sinh viên'
+        },
+        {
+            id: '2',
+            title: 'Giảng viên khác'
+        },
+        {
+            id: '3',
+            title: 'Nhân viên vệ sinh'
+        },
+        {
+            id: '4',
+            title: 'Kĩ thuật'
+        },
+        {
+            id: '5',
+            title: 'Cơ sở vật chất'
 
         },
         ]
     );
 
     const Item = ({ item, onPress }: ItemProps) => (
+        <TouchableOpacity onPress={onPress} style={[styles.item, { backgroundColor: item.id === selected ? Colors.YELLOW : Colors.YELLOW_PALE }]}>
+            <Text style={[styles.text2, { color: item.id === selected ? Colors.WHITE : Colors.GRAY_TEXT2 }]}>{item.title}</Text>
+        </TouchableOpacity>
+    );
+    const handleSelect = (item: Item) => {
+        setReason(item.title)
+        settext(item.title)
+        setSelected(item.id);
+        setModalVisible(false)
+    }
+
+    const ItemDay = ({ item, onPress }: ItemDayProps) => (
         <TouchableOpacity onPress={onPress} style={[styles.item, { backgroundColor: item.id === selectedId ? Colors.YELLOW : Colors.YELLOW_PALE }]}>
             <Text style={[styles.text2, { color: item.id === selectedId ? Colors.WHITE : Colors.GRAY_TEXT2 }]}>{item.title}</Text>
         </TouchableOpacity>
     );
-    const handleSelect = (item: Item) => {
+    const handleSelectDay = (item: ItemDay) => {
+        setTimeDone(item.title)
+        settext2(item.title)
         setSelectedId(item.id);
-        setModalVisible(false)
+        setModalVisibleDay(false)
     }
 
     return (
@@ -166,7 +224,8 @@ const Detail: React.FC<PropsType> = props => {
             <StatusBar barStyle="dark-content"
                 backgroundColor={'transparent'}
                 translucent />
-            <Header title={category} onPress={() => navigation.goBack()}></Header>
+            <Header title={category} iconStyle={{display:'none'}} onPress={() => navigation.goBack()}></Header>
+            <ScrollView>
             <Text style={styles.text}>Tên người yêu cầu:</Text>
             <View style={[styles.row, { justifyContent: 'space-between' }]}>
                 <View style={styles.row}>
@@ -192,9 +251,14 @@ const Detail: React.FC<PropsType> = props => {
                     <Text numberOfLines={2} style={[styles.text, { fontFamily: fontFamily.Medium, color: Colors.BLACK }]} >{description}</Text>
                 </View>
             </View>
-            <View style={[styles.row, { display: stepTwo ? 'flex' : 'none' }]}>
+            <View style={[styles.row,{justifyContent:'flex-start'}]}>
+               {img_report.map((imageUrl, index) => (
+                  <Image key={index} source={{ uri: imageUrl }} style={{ width: 100, height: 100, margin: 10 }} />
+               ))}
+            </View>
+            <View style={[styles.row, { display: step_two_status ? 'flex' : 'none' }]}>
                 <View style={styles.card} >
-                    <Text style={styles.textcard}>Lỗi sự cố từ</Text>
+                    <Text style={styles.textcard}>{text}</Text>
                     <TouchableOpacity onPress={() => setModalVisible(true)}>
                         <Image
                             source={ARROW_SMALL}
@@ -221,8 +285,8 @@ const Detail: React.FC<PropsType> = props => {
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.card, { width: Dimensions.get('window').width * 0.3 }]} >
-                    <Text style={styles.textcard}>Thời gian</Text>
-                    <TouchableOpacity onPress={() => setModalVisible(true)}>
+                    <Text style={styles.textcard}>{text2}</Text>
+                    <TouchableOpacity onPress={() => setModalVisibleDay(true)}>
                         <Image
                             source={ARROW_SMALL}
                             style={styles.arrow}
@@ -230,16 +294,16 @@ const Detail: React.FC<PropsType> = props => {
                         <Modal
                             animationType="slide"
                             transparent={true}
-                            visible={modalVisible}
+                            visible={modalVisibleDay}
                             onRequestClose={() => {
-                                setModalVisible(!modalVisible);
+                                setModalVisibleDay(!modalVisibleDay);
                             }}>
                             <View style={styles.centeredView}>
                                 <View style={styles.modalView}>
                                     <ScrollView
                                         showsHorizontalScrollIndicator={false}>
-                                        {data.map((item: Item) => (
-                                            <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
+                                        {dataDay.map((item: ItemDay) => (
+                                            <ItemDay item={item} key={item.id} onPress={() => handleSelectDay(item)} />
                                         ))}
                                     </ScrollView>
                                 </View>
@@ -253,11 +317,13 @@ const Detail: React.FC<PropsType> = props => {
                     onChangeText={handleOnchangeNote}></TextInput>
             </View>
 
-            <View style={[styles.row, { justifyContent: 'space-between', marginTop: 28, display: step_two_status ? 'flex' : 'none' }]} >
+            <View style={[styles.row, { justifyContent: 'space-between', marginTop: 28,marginBottom:20, display: step_two_status ? 'flex' : 'none' }]} >
                 <Button title='Hoàn thành'  onPress={updateStepThree} status={true} viewStyle={{ width: Dimensions.get('window').width * 0.42, backgroundColor: Colors.RED }} />
-                <Button title='Chưa xử lí được' onPress={() => { }} status={true} viewStyle={{ width: Dimensions.get('window').width * 0.42, backgroundColor: Colors.GREEN }} />
+                <Button title='Chưa xử lí được' onPress={() => {navigation.navigate('Report') }} status={true} viewStyle={{ width: Dimensions.get('window').width * 0.42, backgroundColor: Colors.GREEN }} />
             </View>
             <Button title='Tiếp nhận' onPress={updateStepTwo} status={true} viewStyle={{ width: 350, marginTop: 51, display: step_two_status ? 'none' : 'flex' }} />
+            </ScrollView>
+            
         </SafeAreaView>
     );
 }

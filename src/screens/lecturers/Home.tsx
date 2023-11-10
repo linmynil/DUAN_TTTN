@@ -23,17 +23,19 @@ const Home: React.FC<PropsType> = (props) => {
     const appContext = useContext(AppContext);
 
     if (!appContext) {
-      // Xử lý khi không có giá trị trong AppContext
-      return null;
+        // Xử lý khi không có giá trị trong AppContext
+        return null;
     }
-  
+
     const { infoUser, setinfoUser } = appContext;
-    const {navigation } = props;
+    const { navigation } = props;
     const role = infoUser.role;
     const name = infoUser.name;
-
-
-    const [text, setText] = useState('');
+    const avatar = infoUser.avatar as string;
+    // const [avatar, setAvatar] = useState();
+    // if(infoUser !== null){
+    //     setAvatar(infoUser.avatar)
+    // }
     const [text1, setText1] = useState('');
     const [text2, setText2] = useState('');
     useEffect(() => {
@@ -42,13 +44,13 @@ const Home: React.FC<PropsType> = (props) => {
         setText1(newValue1);
         const newValue2 = role == 1 ? 'Quản lí mượn phòng học, hội trường' : 'Tính sẵn sàng phòng học';
         setText2(newValue2);
-        
-    }, [role]);
-    
+
+    }, [role, infoUser]);
+
     const handleButton = () => {
         if (role == 0) {
             navigation.navigate('FormReport')
-            
+
         }
         else if (role == 1) {
             navigation.navigate('Report')
@@ -62,7 +64,11 @@ const Home: React.FC<PropsType> = (props) => {
                 translucent />
             <View style={[styles.row, { marginTop: 45 }]}>
                 <View style={styles.row}>
-                    <Image style={styles.avatar} source={IMAGE_LOGIN}></Image>
+                    {avatar ? (
+                        <Image style={styles.avatar} source={{ uri: avatar }} />
+                    ) : (
+                        <Image style={styles.avatar} source={IMAGE_LOGIN} />
+                    )}
                     <View>
                         <Text style={styles.text1} >Xin chào,</Text>
                         <Text style={styles.text2} >{name}</Text>

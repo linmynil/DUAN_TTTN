@@ -33,6 +33,7 @@ type DetailProps = {
   step_two_status:boolean,
   step_three_status:boolean,
   category: string;
+  img_report: string[];
 };
 type RegisterProps = {};
 

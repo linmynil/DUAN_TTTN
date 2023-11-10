@@ -34,10 +34,10 @@ type Item = {
     status: boolean
   },
   review: {
+    star: number,
     content: string,
-    star: string,
-    time: string,
   },
+  img_report: string[];
   
 };
 
@@ -90,11 +90,12 @@ const Report: React.FC<PropsType> = props => {
     const step_two_status= item.step_two.status ;
     const step_three_status = item.step_three.status
     const category = item.category[0] as string
-    navigation.navigate('Detail',{phone,name,avatar,time,room,description,id,step_three_status,step_two_status, category});
+    const img_report = item.img_report as string[]
+    navigation.navigate('Detail',{phone,name,avatar,time,room,description,id,step_three_status,step_two_status, category, img_report});
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.8:3000/report/getAllStepone");
+      const response = await axios.get("http://192.168.1.3:3000/report/getAllStepone");
       const reportData = response.data;
       setDataReports(reportData.reverse());
     } catch (error) {
@@ -103,7 +104,7 @@ const Report: React.FC<PropsType> = props => {
   };
   const fetchWaitData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.8:3000/report/getAllSteptwo");
+      const response = await axios.get("http://192.168.1.3:3000/report/getAllSteptwo");
       const waitReports = response.data;
       setwaitReports(waitReports.reverse())
     } catch (error) {
