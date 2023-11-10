@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     Dimensions,
     Image,
@@ -15,28 +15,42 @@ import {
 import { Colors, EDIT, IMAGE_LOGIN, INTERNET, MANAGER, NOTIFICATION, fontFamily } from '../../../assets';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigate/StackHome';
+import { AppContext } from '../../context/AppCotext';
 
 
-type PropsType = NativeStackScreenProps<RootStackParamList, 'Home'>;
+type PropsType = NativeStackScreenProps<RootStackParamList, 'HomeInner'>;
 const Home: React.FC<PropsType> = (props) => {
-    const { route,navigation } = props;
-    const role = route.params?.role;
-    const [text, setText] = useState('');
+    const appContext = useContext(AppContext);
+
+    if (!appContext) {
+        // Xử lý khi không có giá trị trong AppContext
+        return null;
+    }
+
+    const { infoUser, setinfoUser } = appContext;
+    const { navigation } = props;
+    const role = infoUser.role;
+    const name = infoUser.name;
+    const avatar = infoUser.avatar as string;
+    // const [avatar, setAvatar] = useState();
+    // if(infoUser !== null){
+    //     setAvatar(infoUser.avatar)
+    // }
     const [text1, setText1] = useState('');
     const [text2, setText2] = useState('');
     useEffect(() => {
         // Xác định giá trị văn bản mới dựa trên điều kiện hoặc logic của bạn
-        const newValue = role == 0 ? 'Giảng viên' : 'Nhân viên';
-        setText(newValue);
         const newValue1 = role == 0 ? 'Báo cáo sự cố' : 'Sự cố cần hỗ trợ';
         setText1(newValue1);
         const newValue2 = role == 1 ? 'Quản lí mượn phòng học, hội trường' : 'Tính sẵn sàng phòng học';
         setText2(newValue2);
-    }, [role]);
-    
+
+    }, [role, infoUser]);
+
     const handleButton = () => {
         if (role == 0) {
             navigation.navigate('FormReport')
+
         }
         else if (role == 1) {
             navigation.navigate('Report')
@@ -50,10 +64,14 @@ const Home: React.FC<PropsType> = (props) => {
                 translucent />
             <View style={[styles.row, { marginTop: 45 }]}>
                 <View style={styles.row}>
-                    <Image style={styles.avatar} source={IMAGE_LOGIN}></Image>
+                    {avatar ? (
+                        <Image style={styles.avatar} source={{ uri: avatar }} />
+                    ) : (
+                        <Image style={styles.avatar} source={IMAGE_LOGIN} />
+                    )}
                     <View>
                         <Text style={styles.text1} >Xin chào,</Text>
-                        <Text style={styles.text2} >{text}</Text>
+                        <Text style={styles.text2} >{name}</Text>
                     </View>
                 </View>
                 <TouchableOpacity onPress={() => { }} >

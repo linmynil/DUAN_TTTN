@@ -8,21 +8,37 @@ import { Header } from '../../component/Header';
 import { Colors, IMAGE_LOGIN, fontFamily } from '../../../assets'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigate/StackHome';
-import { LecturesContext } from '../utilities/LecturesContext';
 import axios from 'axios';
 
 
 type Item = {
-  id: string;
+  _id: string;
   // avatar: ImageSourcePropType;
-  // nameUser: string;
   id_user: {
     id: string;
     name: string;
   }
   room: string;
+  avatar: string;
+  category: string[];
+  phone: string;
   time: string;
   description: string;
+  name_user: string;
+  step_two: {
+    time: string,
+    status: boolean
+  },
+  step_three: {
+    time: string,
+    status: boolean
+  },
+  review: {
+    star: number,
+    content: string,
+  },
+  img_report: string[];
+  
 };
 
 type ItemProps = {
@@ -30,21 +46,26 @@ type ItemProps = {
   onPress: () => void;
 };
 const Item = ({ item, onPress }: ItemProps) => {
-  const time = item.time;
-  // const date = time.substring(0, 10);
-  // const timedetail = time.substring(11, 19);
+  const time = item.time as string;
+  const dateTime = new Date(time);
+  // Lấy giờ và ngày từ đối tượng Date
+  const hours = dateTime.getHours();
+  const minutes = dateTime.getMinutes();
+  const seconds = dateTime.getSeconds();
+  const year = dateTime.getFullYear();
+  const month = dateTime.getMonth() + 1; // Tháng trong JavaScript đếm từ 0, nên cần cộng thêm 1
+  const day = dateTime.getDate();
   return (
     <TouchableOpacity onPress={onPress} style={styles.item}>
       <Text style={styles.title} >{item.description}</Text>
       <View style={styles.row}>
-        <Image style={styles.avatar} source={{ uri: 'https://inkythuatso.com/uploads/images/2021/12/logo-fpt-polytechnic-inkythuatso-09-12-57-46.jpg' }}  ></Image>
+        <Image style={styles.avatar} source={{ uri: item.avatar }}  ></Image>
         <View>
-          {item.id_user && item.id_user.name && (
-            <Text style={[styles.title, { fontSize: 14, fontFamily: fontFamily.Regular }]}>Người yêu cầu:  {item.id_user.name}</Text>
-          )}
+          <Text style={[styles.title, { fontSize: 14, fontFamily: fontFamily.Medium }]}> {item.name_user}</Text>
           <View style={styles.row}>
             <Text style={styles.itemText}>  Phòng: {item.room}</Text>
-            <Text style={styles.itemText}>{item.time}</Text>
+            <Text style={styles.itemText}>Giờ: {hours + ':' + minutes  }</Text>
+            <Text style={styles.itemText}>Ngày: {day + ':' + month + ':' + year}</Text>
           </View>
         </View>
       </View>
@@ -57,31 +78,73 @@ const Report: React.FC<PropsType> = props => {
   const { navigation } = props;
   const [selectTab, setSelectTab] = useState(0);
   const [dataReports, setDataReports] = React.useState<Item[]>();
+  const [waitReports, setwaitReports] = React.useState<Item[] | undefined>();
   const handleSelect = (item: Item) => {
-    navigation.navigate('Detail');
-    console.log(item.id);
+    const name = item.name_user as string;
+    const phone = item.phone as string;
+    const avatar = item.avatar as string
+    const time= item.time as string
+    const room = item.room as string
+    const id = item._id as string
+    const description = item.description as string
+    const step_two_status= item.step_two.status ;
+    const step_three_status = item.step_three.status
+    const category = item.category[0] as string
+    const img_report = item.img_report as string[]
+    navigation.navigate('Detail',{phone,name,avatar,time,room,description,id,step_three_status,step_two_status, category, img_report});
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.17:3000/report/getALL_reportsApp");
+      const response = await axios.get("http://192.168.1.3:3000/report/getAllStepone");
       const reportData = response.data;
-      console.log("==========================", reportData);
-      setDataReports(reportData);
-      // console.log("============DATANENENENE==============",data);
+      setDataReports(reportData.reverse());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchWaitData = async () => {
+    try {
+      const response = await axios.get("http://192.168.1.3:3000/report/getAllSteptwo");
+      const waitReports = response.data;
+      setwaitReports(waitReports.reverse())
     } catch (error) {
       console.error(error);
     }
   };
   useEffect(() => {
     fetchData();
-  }, []);
+    fetchWaitData();
+    const interval = setInterval(() => {
+      fetchData();
+      fetchWaitData();
+    }, 500); // Tải lại dữ liệu sau mỗi 1 phút (60000 milliseconds)
+
+    return () => {
+      clearInterval(interval); // Hủy cơ chế tải lại định kỳ khi component bị unmount
+    };
+  },[]);
+
+  const renderReports = (reports: Item[] | undefined) => {
+    if (!reports || !Array.isArray(reports)) {
+      return null; // Xử lý trường hợp reports là undefined
+    }
+    return (
+      <ScrollView showsHorizontalScrollIndicator={false}>
+        <ScrollView style={styles.tab}>
+          {reports?.map((item: Item, index: number) => (
+            <Item item={item} key={index} onPress={() => handleSelect(item)} />
+          ))}
+        </ScrollView>
+      </ScrollView>
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content"
         backgroundColor={'transparent'}
         translucent />
       <Header title='Sự cố ' onPress={() => navigation.goBack()}></Header>
-      <View style={styles.switchButton}>
+      <ScrollView style={styles.switchButton}>
         <View style={styles.bordertab}>
           <TouchableOpacity onPress={() => setSelectTab(0)} style={[styles.button, { backgroundColor: selectTab == 0 ? Colors.YELLOW : Colors.WHITE }]}>
             <Text style={[styles.text, { color: selectTab == 0 ? Colors.WHITE : Colors.GRAY_TEXT }]}>Sự cố hiện có</Text>
@@ -90,25 +153,10 @@ const Report: React.FC<PropsType> = props => {
             <Text style={[styles.text, { color: selectTab == 1 ? Colors.WHITE : Colors.GRAY_TEXT }]}>Đang tiếp nhận</Text>
           </TouchableOpacity>
         </View>
-        {selectTab == 0 ? (
-          <ScrollView showsHorizontalScrollIndicator={false}>
-            <View style={styles.tab}>
-              {dataReports?.map((item: Item) => (
-                <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
-              ))}
-            </View>
-          </ScrollView>
-
-        ) : (
-          <ScrollView showsHorizontalScrollIndicator={false}>
-            <View style={styles.tab}>
-              {dataReports?.map((item: Item) => (
-                <Item item={item} key={item.id} onPress={() => handleSelect(item)} />
-              ))}
-            </View>
-          </ScrollView>
-        )}
-      </View>
+        <View>
+          {selectTab === 0 ? renderReports(dataReports) : renderReports(waitReports)}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -150,7 +198,7 @@ const styles = StyleSheet.create({
   },
   tab: {
     width: '100%',
-    height: '90%',
+    // height: '90%',
     marginTop: 35,
     backgroundColor: Colors.GRAY_PALE2,
   },
