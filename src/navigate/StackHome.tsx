@@ -18,9 +18,40 @@ type FormReportProps = {
   name: string
 };
 type StepsReportProps = {};
+
+type Item = {
+  _id: string;
+  // avatar: ImageSourcePropType;
+  id_user: {
+    id: string;
+    name: string;
+  }
+  room: string;
+  avatar: string;
+  category: string[];
+  phone: string;
+  time: string;
+  description: string;
+  name_user: string;
+  step_two: {
+    time: string,
+    status: boolean
+  },
+  step_three: {
+    time: string,
+    status: boolean
+  },
+  review: {
+    star: number,
+    content: string,
+  },
+  img_report: string[];
+  
+};
 type ReportProps = {
   id: string,
-  name: string
+  name: string,
+  
 };
 type DetailProps = {
   name: string,
@@ -58,7 +89,6 @@ const StackHome = () => {
       <Stack.Screen name="StepsReport" component={StepsReport} />
       <Stack.Screen name="Report" component={Report} />
       <Stack.Screen name="Detail" component={Detail} />
-
     </Stack.Navigator>
   );
 };

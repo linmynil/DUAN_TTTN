@@ -94,7 +94,7 @@ const DetailHistory: React.FC<PropsType> = props => {
          setProcessingStepTwo(true);
          console.log('=>>>', _id, { content, rating })
          const review = { rating, content }
-         const response = await fetch(`http://192.168.1.3:3000/report/updateReview/${_id}`, {
+         const response = await fetch(`http://192.168.1.17:3000/report/updateReview/${_id}`, {
             method: 'PUT',
             headers: {
                'Content-Type': 'application/json',
@@ -107,6 +107,7 @@ const DetailHistory: React.FC<PropsType> = props => {
             console.log(data)
 
             setModalVisible(!modalVisible)
+            navigation.goBack();
          } else {
          }
 

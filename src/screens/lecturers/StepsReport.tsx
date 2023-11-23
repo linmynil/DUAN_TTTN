@@ -60,7 +60,7 @@ const StepsReport: React.FC<PropsType> = props => {
             translucent />
          <Header
             title='Yêu cầu hỗ trợ'
-            onPress={() => navigation.goBack()} />
+            onPress={() => navigation.navigate('FormReport')} />
 
          <View style={styles.itemCard}>
             <Image

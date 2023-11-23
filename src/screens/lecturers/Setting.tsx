@@ -20,6 +20,7 @@ type Props = BottomTabScreenProps<TabParamList, 'Setting'>;
 
 const Setting: React.FC<Props> = (props ) => {
      const {navigation} = props;
+
     const appContext = useContext(AppContext);
 
     if (!appContext) {
@@ -32,12 +33,12 @@ const Setting: React.FC<Props> = (props ) => {
     const name_user = infoUser.name as string;
     const email =infoUser.email as string;
     const phoneNumber =infoUser.phoneNumber  as string;
+    const avatar =infoUser.avatar  as string;
 
-    console.log(infoUser);
 
     const handleLogout = () =>{
-        navigation.navigate('Home')
-        setisLogin(false);
+        navigation.navigate('Home');
+        setisLogin(false);    
     }
     //dropdown pick
     return (
@@ -47,7 +48,7 @@ const Setting: React.FC<Props> = (props ) => {
                 translucent />
             <View style={[styles.row, { justifyContent: 'space-between', marginTop: 30 }]}>
                 <View style={styles.row}>
-                    <Image style={styles.avatar} source={ELLIPSE}></Image>
+                    <Image style={styles.avatar} source={{uri:avatar}}></Image>
                     <View>
                         <Text style={styles.text1} >{name_user}</Text>
                         <Text style={styles.text2} >{email}</Text>

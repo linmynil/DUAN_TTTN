@@ -169,7 +169,7 @@ const History: React.FC<PropsType> = (props) => {
     };
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://192.168.1.3:3000/report/getUserStepone/${id_user}`);
+            const response = await axios.get(`http://192.168.1.17:3000/report/getUserStepone/${id_user}`);
             const reportData = response.data;
             setDataReports(reportData.reverse());
         } catch (error) {
@@ -178,7 +178,7 @@ const History: React.FC<PropsType> = (props) => {
     };
     const fetchWaitData = async () => {
         try {
-            const response = await axios.get(`http://192.168.1.3:3000/report/getUserSteptwo/${id_user}`);
+            const response = await axios.get(`http://192.168.1.17:3000/report/getUserSteptwo/${id_user}`);
             const waitReports = response.data;
             setWaitReports(waitReports)
         } catch (error) {
@@ -187,7 +187,7 @@ const History: React.FC<PropsType> = (props) => {
     };
     const fetchDoneData = async () => {
         try {
-            const response = await axios.get(`http://192.168.1.3:3000/report/getUserStepthree/${id_user}`);
+            const response = await axios.get(`http://192.168.1.17:3000/report/getUserStepthree/${id_user}`);
             const doneReports = response.data;
             setDoneReports(doneReports)
         } catch (error) {
@@ -196,7 +196,7 @@ const History: React.FC<PropsType> = (props) => {
     };
     const fetchAllDoneData = async () => {
         try {
-            const response = await axios.get(`http://192.168.1.3:3000/report/getAllHistory`);
+            const response = await axios.get(`http://192.168.1.17:3000/report/getAllHistory`);
             const allDoneReports = response.data;
             setAllDoneReports(allDoneReports)
         } catch (error) {

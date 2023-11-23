@@ -18,14 +18,23 @@ import { RootStackParamList } from '../../navigate/StackHome';
 import { AppContext } from '../../context/AppCotext';
 
 
+
+
 type PropsType = NativeStackScreenProps<RootStackParamList, 'HomeInner'>;
 const Home: React.FC<PropsType> = (props) => {
     const appContext = useContext(AppContext);
+ 
 
     if (!appContext) {
         // Xử lý khi không có giá trị trong AppContext
         return null;
     }
+
+   
+
+
+ 
+      
 
     const { infoUser, setinfoUser } = appContext;
     const { navigation } = props;

@@ -45,7 +45,9 @@ const Main = () => {
 
     return (
         <Tab.Navigator
+        
             screenOptions={({ route }) => ({
+                
                 tabBarIcon: ({ focused }) => {
                     let iconSource;
                     if (route.name === 'Home') {

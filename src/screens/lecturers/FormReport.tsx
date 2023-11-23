@@ -107,7 +107,7 @@ const FormReport: React.FC<PropsType> = (props) => {
             );
    
             const fetchData = async () => {
-               const url = `http://192.168.1.3:3000/report/uploadimages`;
+               const url = `http://192.168.1.17:3000/report/uploadimages`;
                const res = await fetch(url, {
                   method: 'POST',
                   headers: {
@@ -165,7 +165,7 @@ const FormReport: React.FC<PropsType> = (props) => {
             );
    
             const fetchData = async () => {
-               const url = `http://192.168.1.3:3000/report/uploadimages`;
+               const url = `http://192.168.1.17:3000/report/uploadimages`;
                const res = await fetch(url, {
                   method: 'POST',
                   headers: {
@@ -191,7 +191,7 @@ const FormReport: React.FC<PropsType> = (props) => {
    const handleAddReports = async () => {
       console.log('===>',imageUrls);
       try {
-         const response = await axios.post("http://192.168.1.3:3000/report/add_report", {
+         const response = await axios.post("http://192.168.1.17:3000/report/add_report", {
             room: room,
             avatar:avatar,
             name_user: name_user,
@@ -205,7 +205,7 @@ const FormReport: React.FC<PropsType> = (props) => {
          ToastAndroid.show('Add report Success', ToastAndroid.SHORT);
          console.log(response.data)
          setinfoReport(response.data.model)
-         navigation.navigate('StepsReport')
+         navigation.navigate('HomeInner')
       } catch (error) {
          console.error(error);
          ToastAndroid.show('Add report Failed', ToastAndroid.SHORT);

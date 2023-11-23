@@ -29,6 +29,10 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { Button } from '../../component/Button';
 import axios from 'axios';
 import { AppContext } from '../../context/AppCotext';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { TabParamList } from '../../context/AppNavigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigate/StackHome';
 
 type Item = {
     id: string;
@@ -39,9 +43,10 @@ type ItemProps = {
     item: Item;
     onPress: () => void;
 };
-
+// type Props = BottomTabScreenProps<TabParamList, 'Setting'>;
 // type PropsType = NativeStackScreenProps<RootStackParamList, 'Login'>;
-const Login: React.FC = () => {
+const Login: React.FC = ( ) => {
+    // const {navigation} = props;
     const appContext = useContext(AppContext);
 
     if (!appContext) {
@@ -111,7 +116,7 @@ const Login: React.FC = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post("http://192.168.1.3:3000/user/login", {
+            const response = await axios.post("http://192.168.1.17:3000/user/login", {
                 email: email,
                 password: password,
             });
@@ -119,7 +124,6 @@ const Login: React.FC = () => {
           // navigation.navigate('Home', { role: response.data.user.role, id:response.data.user._id , name:response.data.user.name});       
             setisLogin(true);
             setinfoUser(response.data.user);
-         
           
         } catch (error) {
             console.error(error);

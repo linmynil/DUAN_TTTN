@@ -38,7 +38,7 @@ type Item = {
     content: string,
   },
   img_report: string[];
-  
+
 };
 
 type ItemProps = {
@@ -64,7 +64,7 @@ const Item = ({ item, onPress }: ItemProps) => {
           <Text style={[styles.title, { fontSize: 14, fontFamily: fontFamily.Medium }]}> {item.name_user}</Text>
           <View style={styles.row}>
             <Text style={styles.itemText}>  Phòng: {item.room}</Text>
-            <Text style={styles.itemText}>Giờ: {hours + ':' + minutes  }</Text>
+            <Text style={styles.itemText}>Giờ: {hours + ':' + minutes}</Text>
             <Text style={styles.itemText}>Ngày: {day + ':' + month + ':' + year}</Text>
           </View>
         </View>
@@ -83,19 +83,19 @@ const Report: React.FC<PropsType> = props => {
     const name = item.name_user as string;
     const phone = item.phone as string;
     const avatar = item.avatar as string
-    const time= item.time as string
+    const time = item.time as string
     const room = item.room as string
     const id = item._id as string
     const description = item.description as string
-    const step_two_status= item.step_two.status ;
+    const step_two_status = item.step_two.status;
     const step_three_status = item.step_three.status
     const category = item.category[0] as string
     const img_report = item.img_report as string[]
-    navigation.navigate('Detail',{phone,name,avatar,time,room,description,id,step_three_status,step_two_status, category, img_report});
+    navigation.navigate('Detail', { phone, name, avatar, time, room, description, id, step_three_status, step_two_status, category, img_report });
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.3:3000/report/getAllStepone");
+      const response = await axios.get("http://192.168.1.17:3000/report/getAllStepone");
       const reportData = response.data;
       setDataReports(reportData.reverse());
     } catch (error) {
@@ -104,7 +104,7 @@ const Report: React.FC<PropsType> = props => {
   };
   const fetchWaitData = async () => {
     try {
-      const response = await axios.get("http://192.168.1.3:3000/report/getAllSteptwo");
+      const response = await axios.get("http://192.168.1.17:3000/report/getAllSteptwo");
       const waitReports = response.data;
       setwaitReports(waitReports.reverse())
     } catch (error) {
@@ -117,27 +117,34 @@ const Report: React.FC<PropsType> = props => {
     const interval = setInterval(() => {
       fetchData();
       fetchWaitData();
-    }, 500); // Tải lại dữ liệu sau mỗi 1 phút (60000 milliseconds)
+    }, 
+    1000);
+    // Tải lại dữ liệu sau mỗi 1 phút (60000 milliseconds)
 
     return () => {
       clearInterval(interval); // Hủy cơ chế tải lại định kỳ khi component bị unmount
     };
-  },[]);
+  }, []);
 
   const renderReports = (reports: Item[] | undefined) => {
-    if (!reports || !Array.isArray(reports)) {
-      return null; // Xử lý trường hợp reports là undefined
-    }
-    return (
-      <ScrollView showsHorizontalScrollIndicator={false}>
-        <ScrollView style={styles.tab}>
-          {reports?.map((item: Item, index: number) => (
-            <Item item={item} key={index} onPress={() => handleSelect(item)} />
-          ))}
+    if (reports == undefined) {
+      return null;
+      // Xử lý trường hợp reports là undefined
+    } else {
+      return (
+        <ScrollView showsHorizontalScrollIndicator={false}>
+          <ScrollView style={styles.tab}>
+            {reports.map((item: Item, index: number) => (
+              <Item item={item} key={index} onPress={() => handleSelect(item)} />
+            ))}
+          </ScrollView>
         </ScrollView>
-      </ScrollView>
-    );
+      );
+    }
+
   };
+
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content"
